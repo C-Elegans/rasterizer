@@ -7,9 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 @interface ViewController : NSViewController
-
+@property NSImage* image;
 
 @end
 

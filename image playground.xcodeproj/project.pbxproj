@@ -13,6 +13,9 @@
 		0AC8FBBC1BEAA409008A818B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AC8FBBB1BEAA409008A818B /* Assets.xcassets */; };
 		0AC8FBBF1BEAA409008A818B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AC8FBBD1BEAA409008A818B /* Main.storyboard */; };
 		0AC8FBCA1BEAA40B008A818B /* image_playgroundTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBC91BEAA40B008A818B /* image_playgroundTests.m */; };
+		0AC8FBD51BEAA8C0008A818B /* image_large.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC8FBD41BEAA8C0008A818B /* image_large.png */; };
+		0AC8FBD71BEAA8D4008A818B /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC8FBD61BEAA8D4008A818B /* image.png */; };
+		0AC8FBDD1BEADAE4008A818B /* rgbtest.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC8FBDC1BEADAE4008A818B /* rgbtest.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +41,9 @@
 		0AC8FBC51BEAA40B008A818B /* image playgroundTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "image playgroundTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AC8FBC91BEAA40B008A818B /* image_playgroundTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = image_playgroundTests.m; sourceTree = "<group>"; };
 		0AC8FBCB1BEAA40B008A818B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0AC8FBD41BEAA8C0008A818B /* image_large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image_large.png; sourceTree = "<group>"; };
+		0AC8FBD61BEAA8D4008A818B /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
+		0AC8FBDC1BEADAE4008A818B /* rgbtest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rgbtest.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +85,9 @@
 		0AC8FBB11BEAA408008A818B /* image playground */ = {
 			isa = PBXGroup;
 			children = (
+				0AC8FBDC1BEADAE4008A818B /* rgbtest.png */,
+				0AC8FBD61BEAA8D4008A818B /* image.png */,
+				0AC8FBD41BEAA8C0008A818B /* image_large.png */,
 				0AC8FBB21BEAA409008A818B /* AppDelegate.h */,
 				0AC8FBB31BEAA409008A818B /* AppDelegate.m */,
 				0AC8FBB81BEAA409008A818B /* ViewController.h */,
@@ -190,6 +199,9 @@
 			files = (
 				0AC8FBBC1BEAA409008A818B /* Assets.xcassets in Resources */,
 				0AC8FBBF1BEAA409008A818B /* Main.storyboard in Resources */,
+				0AC8FBD51BEAA8C0008A818B /* image_large.png in Resources */,
+				0AC8FBD71BEAA8D4008A818B /* image.png in Resources */,
+				0AC8FBDD1BEADAE4008A818B /* rgbtest.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,24 +337,32 @@
 		0AC8FBCF1BEAA40B008A818B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "image playground/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-msse4.2";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.C-Elegans.image-playground";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
 		0AC8FBD01BEAA40B008A818B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "image playground/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-msse4.2";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.C-Elegans.image-playground";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
