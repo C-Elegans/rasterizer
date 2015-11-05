@@ -343,7 +343,10 @@
 				INFOPLIST_FILE = "image playground/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "-msse4.2";
+				OTHER_CFLAGS = (
+					"-msse4.2",
+					"-Ofast",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.C-Elegans.image-playground";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = x86_64;
@@ -359,7 +362,10 @@
 				INFOPLIST_FILE = "image playground/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "-msse4.2";
+				OTHER_CFLAGS = (
+					"-msse4.2",
+					"-Ofast",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.C-Elegans.image-playground";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = x86_64;
