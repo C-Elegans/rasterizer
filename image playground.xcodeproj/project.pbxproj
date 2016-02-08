@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A16D6521C68E19900C6D183 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A16D6511C68E19900C6D183 /* fb.png */; };
+		0A16D6541C68E36200C6D183 /* fb.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A16D6531C68E36200C6D183 /* fb.tiff */; };
 		0AC8FBB41BEAA409008A818B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB31BEAA409008A818B /* AppDelegate.m */; };
 		0AC8FBB71BEAA409008A818B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB61BEAA409008A818B /* main.m */; };
 		0AC8FBBA1BEAA409008A818B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB91BEAA409008A818B /* ViewController.m */; };
@@ -29,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A16D6511C68E19900C6D183 /* fb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb.png; sourceTree = "<group>"; };
+		0A16D6531C68E36200C6D183 /* fb.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = fb.tiff; sourceTree = "<group>"; };
 		0AC8FBAF1BEAA408008A818B /* image playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "image playground.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AC8FBB21BEAA409008A818B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0AC8FBB31BEAA409008A818B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -85,6 +89,8 @@
 		0AC8FBB11BEAA408008A818B /* image playground */ = {
 			isa = PBXGroup;
 			children = (
+				0A16D6531C68E36200C6D183 /* fb.tiff */,
+				0A16D6511C68E19900C6D183 /* fb.png */,
 				0AC8FBDC1BEADAE4008A818B /* rgbtest.png */,
 				0AC8FBD61BEAA8D4008A818B /* image.png */,
 				0AC8FBD41BEAA8C0008A818B /* image_large.png */,
@@ -202,6 +208,8 @@
 				0AC8FBD51BEAA8C0008A818B /* image_large.png in Resources */,
 				0AC8FBD71BEAA8D4008A818B /* image.png in Resources */,
 				0AC8FBDD1BEADAE4008A818B /* rgbtest.png in Resources */,
+				0A16D6541C68E36200C6D183 /* fb.tiff in Resources */,
+				0A16D6521C68E19900C6D183 /* fb.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,10 +351,7 @@
 				INFOPLIST_FILE = "image playground/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = (
-					"-msse4.2",
-					"-Ofast",
-				);
+				OTHER_CFLAGS = "-msse4.2";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.C-Elegans.image-playground";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = x86_64;
@@ -362,10 +367,7 @@
 				INFOPLIST_FILE = "image playground/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = (
-					"-msse4.2",
-					"-Ofast",
-				);
+				OTHER_CFLAGS = "-msse4.2";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.C-Elegans.image-playground";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = x86_64;
@@ -417,6 +419,7 @@
 				0AC8FBD01BEAA40B008A818B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0AC8FBD11BEAA40B008A818B /* Build configuration list for PBXNativeTarget "image playgroundTests" */ = {
 			isa = XCConfigurationList;
@@ -425,6 +428,7 @@
 				0AC8FBD31BEAA40B008A818B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
