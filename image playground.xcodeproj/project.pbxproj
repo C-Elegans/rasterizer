@@ -10,6 +10,9 @@
 		0A16D6521C68E19900C6D183 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A16D6511C68E19900C6D183 /* fb.png */; };
 		0A16D6541C68E36200C6D183 /* fb.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A16D6531C68E36200C6D183 /* fb.tiff */; };
 		0AB7540C1C6A34B5004C65A6 /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 0AB7540A1C6A34B5004C65A6 /* vector.c */; };
+		0AB7540F1C6A9A82004C65A6 /* OBJLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB7540E1C6A9A82004C65A6 /* OBJLoader.m */; };
+		0AB754111C6A9F2A004C65A6 /* african_head.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0AB754101C6A9F2A004C65A6 /* african_head.obj */; };
+		0AB754141C6AB0DB004C65A6 /* Vectors.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB754131C6AB0DB004C65A6 /* Vectors.m */; };
 		0AC8FBB41BEAA409008A818B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB31BEAA409008A818B /* AppDelegate.m */; };
 		0AC8FBB71BEAA409008A818B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB61BEAA409008A818B /* main.m */; };
 		0AC8FBBA1BEAA409008A818B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB91BEAA409008A818B /* ViewController.m */; };
@@ -36,6 +39,11 @@
 		0A16D6531C68E36200C6D183 /* fb.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = fb.tiff; sourceTree = "<group>"; };
 		0AB7540A1C6A34B5004C65A6 /* vector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vector.c; sourceTree = "<group>"; };
 		0AB7540B1C6A34B5004C65A6 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = "<group>"; };
+		0AB7540D1C6A9A82004C65A6 /* OBJLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBJLoader.h; sourceTree = "<group>"; };
+		0AB7540E1C6A9A82004C65A6 /* OBJLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBJLoader.m; sourceTree = "<group>"; };
+		0AB754101C6A9F2A004C65A6 /* african_head.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = african_head.obj; sourceTree = "<group>"; };
+		0AB754121C6AB0DB004C65A6 /* Vectors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vectors.h; sourceTree = "<group>"; };
+		0AB754131C6AB0DB004C65A6 /* Vectors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vectors.m; sourceTree = "<group>"; };
 		0AC8FBAF1BEAA408008A818B /* image playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "image playground.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AC8FBB21BEAA409008A818B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0AC8FBB31BEAA409008A818B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -92,6 +100,7 @@
 		0AC8FBB11BEAA408008A818B /* image playground */ = {
 			isa = PBXGroup;
 			children = (
+				0AB754101C6A9F2A004C65A6 /* african_head.obj */,
 				0A16D6531C68E36200C6D183 /* fb.tiff */,
 				0A16D6511C68E19900C6D183 /* fb.png */,
 				0AC8FBDC1BEADAE4008A818B /* rgbtest.png */,
@@ -103,10 +112,14 @@
 				0AC8FBB31BEAA409008A818B /* AppDelegate.m */,
 				0AC8FBB81BEAA409008A818B /* ViewController.h */,
 				0AC8FBB91BEAA409008A818B /* ViewController.m */,
+				0AB7540D1C6A9A82004C65A6 /* OBJLoader.h */,
+				0AB7540E1C6A9A82004C65A6 /* OBJLoader.m */,
 				0AC8FBBB1BEAA409008A818B /* Assets.xcassets */,
 				0AC8FBBD1BEAA409008A818B /* Main.storyboard */,
 				0AC8FBC01BEAA409008A818B /* Info.plist */,
 				0AC8FBB51BEAA409008A818B /* Supporting Files */,
+				0AB754121C6AB0DB004C65A6 /* Vectors.h */,
+				0AB754131C6AB0DB004C65A6 /* Vectors.m */,
 			);
 			path = "image playground";
 			sourceTree = "<group>";
@@ -214,6 +227,7 @@
 				0AC8FBD71BEAA8D4008A818B /* image.png in Resources */,
 				0AC8FBDD1BEADAE4008A818B /* rgbtest.png in Resources */,
 				0A16D6541C68E36200C6D183 /* fb.tiff in Resources */,
+				0AB754111C6A9F2A004C65A6 /* african_head.obj in Resources */,
 				0A16D6521C68E19900C6D183 /* fb.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -233,6 +247,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AB7540C1C6A34B5004C65A6 /* vector.c in Sources */,
+				0AB7540F1C6A9A82004C65A6 /* OBJLoader.m in Sources */,
+				0AB754141C6AB0DB004C65A6 /* Vectors.m in Sources */,
 				0AC8FBBA1BEAA409008A818B /* ViewController.m in Sources */,
 				0AC8FBB71BEAA409008A818B /* main.m in Sources */,
 				0AC8FBB41BEAA409008A818B /* AppDelegate.m in Sources */,

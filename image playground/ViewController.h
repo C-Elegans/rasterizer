@@ -8,10 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
-
+#import "OBJLoader.h"
 @interface ViewController : NSViewController
 @property NSImage* image;
-
+-(void) render:(OBJLoader*)loader;
 @end
 #include "vector.h"
 //				AABBGGRR

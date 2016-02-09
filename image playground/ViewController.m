@@ -14,7 +14,8 @@
 #define HEIGHT 480
 @implementation ViewController
 int* image_data;
-void render();
+
+void render(vec3* vertices, int numvertices, face* faces, int numfaces);
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	//long start_time,stop_time;
@@ -27,8 +28,10 @@ void render();
 		NSLog(@"Cannot convert image, incorrect bits per pixel: %ld",[imageRep bitsPerPixel]);
 		exit(1);
 	}
+	OBJLoader* loader = [[OBJLoader alloc]init:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"]];
 	image_data = (int*)[imageRep bitmapData];
-	render();
+	if(loader == nil)exit(-1);
+	render(loader.vertices,loader.numVertices, loader.faces, loader.numFaces);
 	
 	self.image = [[NSImage alloc] initWithCGImage:[imageRep CGImage] size:[imageRep size]];
 	
@@ -106,17 +109,25 @@ void randpos(vec2i* ptr){
 	ptr[1] = (vec2i){rand()%640,rand()%480};
 	ptr[2] = (vec2i){rand()%640,rand()%480};
 }
-void render(){
-	srand(0);
-	printf("color: %x\n",*image_data);
-	//vec3i a,b,c;
-	vec2i positions[3];
-	for(int i=0;i<1000;i++){
-		randpos(positions);
-		triangle(positions, rand() | 0xff000000);
+void render(vec3* vertices, int numvertices, face* faces, int numfaces){
+	for(int i=0; i<numfaces;i++){
+		face f = faces[i];
+	
+		
+		
+		vec2i screen_coords[3];
+		NSLog(@"vert.x: %f",vertices[f.x].x);
+		vec3 world_coords = vertices[0];
+		screen_coords[0] = (vec2i){(world_coords.x+1.)*WIDTH/2., (world_coords.y+1.)*HEIGHT/2.};
+		world_coords = vertices[1];
+		screen_coords[1] = (vec2i){(world_coords.x+1.)*WIDTH/2., (world_coords.y+1.)*HEIGHT/2.};
+		world_coords = vertices[2];
+		screen_coords[2] = (vec2i){(world_coords.x+1.)*WIDTH/2., (world_coords.y+1.)*HEIGHT/2.};
+		
+		triangle(screen_coords, rand() | 0xFF000000);
+	
 	}
-	
-	
 }
+
 
 @end

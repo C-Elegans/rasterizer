@@ -33,6 +33,7 @@ typedef struct{
 	float z;
 	float w;
 }vec4;
+typedef vec3i face;
 float cross2(vec2 a, vec2 b);
 vec2 add2(vec2 a, vec2 b);
 vec2 sub2(vec2 a, vec2 b);
