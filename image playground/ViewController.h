@@ -13,4 +13,18 @@
 @property NSImage* image;
 
 @end
-
+typedef struct{
+	int x;
+	int y;
+	int z;
+}vec3i;
+typedef struct{
+	float x;
+	float y;
+	float z;
+}vec3;
+//				AABBGGRR
+#define GREEN 0xff00FF00
+#define RED 0xFF0000FF
+#define BLUE 0xFFFF0000
+#define MAGENTA 0xFFFF00FF
