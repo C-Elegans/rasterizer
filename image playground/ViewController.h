@@ -13,16 +13,7 @@
 @property NSImage* image;
 
 @end
-typedef struct{
-	int x;
-	int y;
-	int z;
-}vec3i;
-typedef struct{
-	float x;
-	float y;
-	float z;
-}vec3;
+#include "vector.h"
 //				AABBGGRR
 #define GREEN 0xff00FF00
 #define RED 0xFF0000FF

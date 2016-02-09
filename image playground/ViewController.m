@@ -11,7 +11,7 @@
 #include <tmmintrin.h>
 #include <smmintrin.h>
 #define WIDTH 640
-#define HEIGHT 480;
+#define HEIGHT 480
 @implementation ViewController
 int* image_data;
 void render();
@@ -73,44 +73,47 @@ void line(vec3i a, vec3i b, int color){
 		if (e2 < dy) { err += dx; a.y += sy; }
 	}
 }
-void triangle(vec3i a, vec3i b, vec3i c, int color){
-	if (a.y>b.y) swap(&a, &b);
-	if (a.y>c.y) swap(&a, &c);
-	if (b.y>c.y) swap(&b, &c);
-	float m = ((float)c.y-a.y)/((float)c.x-a.x);
-	float xnew = (((float)b.y-a.y)/m) + (float)a.x;
-	vec3i d = (vec3i){(int) xnew, b.y,0};
-	if(b.x>d.x)swap(&b,&d);
-	
-	float x0=b.x;
-	float x1=d.x;
-	float step = (float)(c.x-b.x)/(float)(c.y-b.y);
-	float step2 = (float)(d.x-c.x)/(float)(d.y-c.y);
-	for(int y=b.y;y<c.y;y++){
-		x0 += step;
-		x1 += step2;
-		fill_row(x0, x1, y, color);
+vec3 barycentric(vec2i* pts, vec2i p){
+	vec3 u = cross3((vec3){pts[2].x-pts[0].x, pts[1].x-pts[0].x,pts[0].x-p.x}, (vec3){pts[2].y-pts[0].y, pts[1].y-pts[0].y, pts[0].y-p.y});
+	if(fabsf(u.z)<1) return (vec3){-1,1,1};
+	return (vec3){1.f-(u.x+u.y)/u.z, u.y/u.z, u.x/u.z};
+}
+void triangle(vec2i* pts, int color){
+	vec2i bboxmin = (vec2i){WIDTH-1,  HEIGHT-1};
+	vec2i bboxmax = (vec2i){0, 0};
+	vec2i clamp = (vec2i){WIDTH-1, HEIGHT-1};
+	for (int i=0; i<3; i++) {
+		bboxmin.x = MAX(0,        MIN(bboxmin.x, pts[i].x));
+		bboxmin.y = MAX(0,        MIN(bboxmin.y, pts[i].y));
+		
+		
+		bboxmax.x = MIN(clamp.x, MAX(bboxmax.x, pts[i].x));
+		bboxmax.y = MIN(clamp.y, MAX(bboxmax.y, pts[i].y));
 	}
-	x0=b.x;
-	x1=d.x;
-	step = (float)(a.x-b.x)/(float)(a.y-b.y);
-	 step2 = (float)(d.x-a.x)/(float)(d.y-a.y);
-	for(int y=b.y;y>a.y;y--){
-		x0 -= step;
-		x1 -= step2;
-		fill_row(x0, x1, y, color);
+	vec2i P;
+	for (P.x=bboxmin.x; P.x<=bboxmax.x; P.x++) {
+		for (P.y=bboxmin.y; P.y<=bboxmax.y; P.y++) {
+			vec3 bc_screen  = barycentric(pts, P);
+			if (bc_screen.x<0 || bc_screen.y<0 || bc_screen.z<0) continue;
+			set_pixel(P.x, P.y, color);
+		}
 	}
 	
 }
-vec3i randpos(){
-	return (vec3i){rand()%640,rand()%480,0};
+void randpos(vec2i* ptr){
+	
+	ptr[0] = (vec2i){rand()%640,rand()%480};
+	ptr[1] = (vec2i){rand()%640,rand()%480};
+	ptr[2] = (vec2i){rand()%640,rand()%480};
 }
 void render(){
 	srand(0);
 	printf("color: %x\n",*image_data);
 	//vec3i a,b,c;
+	vec2i positions[3];
 	for(int i=0;i<1000;i++){
-		triangle(randpos(), randpos(), randpos(), rand() | 0xff000000);
+		randpos(positions);
+		triangle(positions, rand() | 0xff000000);
 	}
 	
 	

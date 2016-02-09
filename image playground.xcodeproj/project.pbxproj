@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0A16D6521C68E19900C6D183 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A16D6511C68E19900C6D183 /* fb.png */; };
 		0A16D6541C68E36200C6D183 /* fb.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A16D6531C68E36200C6D183 /* fb.tiff */; };
+		0AB7540C1C6A34B5004C65A6 /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 0AB7540A1C6A34B5004C65A6 /* vector.c */; };
 		0AC8FBB41BEAA409008A818B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB31BEAA409008A818B /* AppDelegate.m */; };
 		0AC8FBB71BEAA409008A818B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB61BEAA409008A818B /* main.m */; };
 		0AC8FBBA1BEAA409008A818B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB91BEAA409008A818B /* ViewController.m */; };
@@ -33,6 +34,8 @@
 /* Begin PBXFileReference section */
 		0A16D6511C68E19900C6D183 /* fb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb.png; sourceTree = "<group>"; };
 		0A16D6531C68E36200C6D183 /* fb.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = fb.tiff; sourceTree = "<group>"; };
+		0AB7540A1C6A34B5004C65A6 /* vector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vector.c; sourceTree = "<group>"; };
+		0AB7540B1C6A34B5004C65A6 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = "<group>"; };
 		0AC8FBAF1BEAA408008A818B /* image playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "image playground.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AC8FBB21BEAA409008A818B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0AC8FBB31BEAA409008A818B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -95,6 +98,8 @@
 				0AC8FBD61BEAA8D4008A818B /* image.png */,
 				0AC8FBD41BEAA8C0008A818B /* image_large.png */,
 				0AC8FBB21BEAA409008A818B /* AppDelegate.h */,
+				0AB7540A1C6A34B5004C65A6 /* vector.c */,
+				0AB7540B1C6A34B5004C65A6 /* vector.h */,
 				0AC8FBB31BEAA409008A818B /* AppDelegate.m */,
 				0AC8FBB81BEAA409008A818B /* ViewController.h */,
 				0AC8FBB91BEAA409008A818B /* ViewController.m */,
@@ -167,7 +172,7 @@
 		0AC8FBA71BEAA408008A818B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Michael Nolan";
 				TargetAttributes = {
 					0AC8FBAE1BEAA408008A818B = {
@@ -227,6 +232,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AB7540C1C6A34B5004C65A6 /* vector.c in Sources */,
 				0AC8FBBA1BEAA409008A818B /* ViewController.m in Sources */,
 				0AC8FBB71BEAA409008A818B /* main.m in Sources */,
 				0AC8FBB41BEAA409008A818B /* AppDelegate.m in Sources */,
@@ -345,7 +351,6 @@
 		0AC8FBCF1BEAA40B008A818B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "image playground/Info.plist";
@@ -361,7 +366,6 @@
 		0AC8FBD01BEAA40B008A818B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "image playground/Info.plist";
