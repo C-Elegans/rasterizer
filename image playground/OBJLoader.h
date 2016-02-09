@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #include "vector.h"
-
+#import "Vectors.h"
 @interface OBJLoader : NSObject
-@property vec3* vertices;
-@property face* faces;
+@property NSArray<Vec3f*>* vertices;
+@property NSArray<Vec3i*>* faces;
 @property int numFaces;
 @property int numVertices;
 -(id) init:(NSString*) file;

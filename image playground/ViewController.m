@@ -14,8 +14,7 @@
 #define HEIGHT 480
 @implementation ViewController
 int* image_data;
-
-void render(vec3* vertices, int numvertices, face* faces, int numfaces);
+void render();
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	//long start_time,stop_time;
@@ -31,7 +30,7 @@ void render(vec3* vertices, int numvertices, face* faces, int numfaces);
 	OBJLoader* loader = [[OBJLoader alloc]init:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"]];
 	image_data = (int*)[imageRep bitmapData];
 	if(loader == nil)exit(-1);
-	render(loader.vertices,loader.numVertices, loader.faces, loader.numFaces);
+	[self render:loader];
 	
 	self.image = [[NSImage alloc] initWithCGImage:[imageRep CGImage] size:[imageRep size]];
 	
@@ -109,25 +108,26 @@ void randpos(vec2i* ptr){
 	ptr[1] = (vec2i){rand()%640,rand()%480};
 	ptr[2] = (vec2i){rand()%640,rand()%480};
 }
-void render(vec3* vertices, int numvertices, face* faces, int numfaces){
-	for(int i=0; i<numfaces;i++){
-		face f = faces[i];
+void minirender(vec3* vertices, int numvertices){
 	
+}
+-(void) render:(OBJLoader*)loader{
+	for (Vec3i *face in loader.faces) {
 		
 		
 		vec2i screen_coords[3];
-		NSLog(@"vert.x: %f",vertices[f.x].x);
-		vec3 world_coords = vertices[0];
-		screen_coords[0] = (vec2i){(world_coords.x+1.)*WIDTH/2., (world_coords.y+1.)*HEIGHT/2.};
-		world_coords = vertices[1];
-		screen_coords[1] = (vec2i){(world_coords.x+1.)*WIDTH/2., (world_coords.y+1.)*HEIGHT/2.};
-		world_coords = vertices[2];
-		screen_coords[2] = (vec2i){(world_coords.x+1.)*WIDTH/2., (world_coords.y+1.)*HEIGHT/2.};
 		
-		triangle(screen_coords, rand() | 0xFF000000);
-	
-	}
-}
+		vec3 world_coords = [[loader.vertices objectAtIndex:face.x] toVec];
+		screen_coords[0] = (vec2i){(world_coords.x+1.)*WIDTH/2., HEIGHT-((world_coords.y+1.)*HEIGHT/2.)};
+		world_coords = [[loader.vertices objectAtIndex:face.y] toVec];
+		screen_coords[1] = (vec2i){(world_coords.x+1.)*WIDTH/2., HEIGHT-((world_coords.y+1.)*HEIGHT/2.)};
+		world_coords = [[loader.vertices objectAtIndex:face.z] toVec];
+		screen_coords[2] = (vec2i){(world_coords.x+1.)*WIDTH/2., HEIGHT-((world_coords.y+1.)*HEIGHT/2.)};
 
+		triangle(screen_coords, rand() | 0xFF000000);
+	}
+	
+	
+}
 
 @end

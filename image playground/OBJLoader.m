@@ -8,6 +8,7 @@
 
 #import "OBJLoader.h"
 @implementation OBJLoader
+
 -(id)init:(NSString *)file{
 	self = [super init];
 	NSString *objData = [NSString stringWithContentsOfFile:file];
@@ -18,8 +19,11 @@
 		if([line hasPrefix:@"v "])vertexCount++;
 		else if([line hasPrefix:@"f "])faceCount++;
 	}
-	self.vertices = malloc(sizeof(vec3)*vertexCount);
-	self.faces = malloc(sizeof(face)*faceCount);
+	NSMutableArray<Vec3f*>* vertices = [NSMutableArray new];
+	NSMutableArray<Vec3i*>* faces= [NSMutableArray new];
+	
+	self.vertices = vertices;
+	self.faces = faces;
 	self.numFaces = faceCount;
 	self.numVertices = vertexCount;
 	NSLog(@"vertices: %d, faces: %d",vertexCount,faceCount);
@@ -29,10 +33,11 @@
 		if([line hasPrefix:@"v "]){
 			NSString *lineTrunc = [line substringFromIndex:2];
 			NSArray *lineVertices = [lineTrunc componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-		
-			self.vertices[vertexCount].x = [[lineVertices objectAtIndex:0] floatValue];
-			self.vertices[vertexCount].y = [[lineVertices objectAtIndex:1] floatValue];
-			self.vertices[vertexCount].z = [[lineVertices objectAtIndex:2] floatValue];
+			Vec3f* vertex = [Vec3f new];
+			vertex.x = [[lineVertices objectAtIndex:0] floatValue];
+			vertex.y = [[lineVertices objectAtIndex:1] floatValue];
+			vertex.z = [[lineVertices objectAtIndex:2] floatValue];
+			[vertices addObject:vertex];
 			//NSLog(@"V: %f, %@", [[lineVertices objectAtIndex:0]floatValue], [lineVertices objectAtIndex:0] );
 		}
 		else if([line hasPrefix:@"f "]) {
@@ -45,15 +50,17 @@
 			 o       The second reference number is the texture vertex. It follows the first slash.
 			 o       The third reference number is the vertex normal. It follows the second slash.
 			 */
+			Vec3i* face = [Vec3i new];
 			NSString *oneGroup = [faceIndexGroups objectAtIndex:0];
 			NSArray *groupParts = [oneGroup componentsSeparatedByString:@"/"];
-			_faces[faceCount].x = [[groupParts objectAtIndex:0] intValue]-1; // indices in file are 1-indexed, not 0 indexed
+			face.x = [[groupParts objectAtIndex:0] intValue]-1; // indices in file are 1-indexed, not 0 indexed
 			oneGroup = [faceIndexGroups objectAtIndex:1];
 			groupParts = [oneGroup componentsSeparatedByString:@"/"];
-			_faces[faceCount].y = [[groupParts objectAtIndex:0] intValue]-1;
+			face.y = [[groupParts objectAtIndex:0] intValue]-1;
 			oneGroup = [faceIndexGroups objectAtIndex:2];
 			groupParts = [oneGroup componentsSeparatedByString:@"/"];
-			_faces[faceCount].z = [[groupParts objectAtIndex:0] intValue]-1;
+			face.z = [[groupParts objectAtIndex:0] intValue]-1;
+			[faces addObject:face];
 			faceCount++;
 			
 		}
