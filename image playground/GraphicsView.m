@@ -8,6 +8,7 @@
 
 #import "GraphicsView.h"
 #import <GLKit/GLKit.h>
+#import "Model.h"
 #define WIDTH 640
 #define HEIGHT 480
 #define BYTES_PER_PIXEL 4
@@ -17,18 +18,19 @@
 @implementation GraphicsView
 int* image_data;
 float* zbuffer;
+NSMutableArray<Model*>* models;
 vec3 camera = (vec3){-1,0,3};
 vec3 center = (vec3){0,0,-1};
 float color = 0.2;
-OBJLoader* loader;
+
 NSBitmapImageRep* imageRep;
 -(void) common_init{
 	
 	image_data = calloc(SIZE, sizeof(unsigned short));
-	
-	loader = [[OBJLoader alloc]init:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"]];
+	models = [NSMutableArray new];
+	Model* model = [OBJLoader createModelFromFile:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"]];
+	[models addObject:model];
 	zbuffer = calloc(HEIGHT*WIDTH, sizeof(float));
-	if(loader == nil)exit(-1);
 	
 }
 - (id)initWithFrame:(NSRect)frame
@@ -177,36 +179,37 @@ vec3 to_screen(vec3 v){
 	
 	GLKMatrix4 viewMatrix = GLKMatrix4MakePerspective(70 * (M_PI/180), WIDTH/HEIGHT, -0.1, -10);
 	GLKMatrix4 camearaMatrix = GLKMatrix4MakeLookAt(camera.x, camera.y, camera.z, center.x, center.y, center.z, 0, 1, 0);
-	GLKMatrix4 result = GLKMatrix4Multiply(GLKMatrix4Multiply(viewMatrix, Projection), camearaMatrix);
-	
-	for (Vec3i *face in loader.faces) {
+	for(Model* model in models){
+		GLKMatrix4 result = GLKMatrix4Multiply(GLKMatrix4Multiply(viewMatrix, Projection), camearaMatrix);
 		
-		
-		vec3 screen_coords[3];
-		vec3 world_coords[3];
-		world_coords[0] = [[loader.vertices objectAtIndex:face.x] toVec];
-		world_coords[1] = [[loader.vertices objectAtIndex:face.y] toVec];
-		world_coords[2] = [[loader.vertices objectAtIndex:face.z] toVec];
-		for(int i=0;i<3;i++){
-			//vec4 proj_coords = vecmul((vec4){world_coords[i].x,world_coords[i].y,world_coords[i].z,1}, result.m);
+		for (Vec3i *face in model.faces) {
 			
-			GLKVector4 proj = GLKMatrix4MultiplyVector4(result, GLKVector4Make(world_coords[i].x,world_coords[i].y,world_coords[i].z,1));
 			
-			screen_coords[i] = wdiv((vec4){proj.x, proj.y, proj.z, proj.w});
-			screen_coords[i] = to_screen(screen_coords[i]);
-			screen_coords[i].y = HEIGHT-screen_coords[i].y;
+			vec3 screen_coords[3];
+			vec3 world_coords[3];
+			world_coords[0] = [[model.vertices objectAtIndex:face.x] toVec];
+			world_coords[1] = [[model.vertices objectAtIndex:face.y] toVec];
+			world_coords[2] = [[model.vertices objectAtIndex:face.z] toVec];
+			for(int i=0;i<3;i++){
+				//vec4 proj_coords = vecmul((vec4){world_coords[i].x,world_coords[i].y,world_coords[i].z,1}, result.m);
+				
+				GLKVector4 proj = GLKMatrix4MultiplyVector4(result, GLKVector4Make(world_coords[i].x,world_coords[i].y,world_coords[i].z,1));
+				
+				screen_coords[i] = wdiv((vec4){proj.x, proj.y, proj.z, proj.w});
+				screen_coords[i] = to_screen(screen_coords[i]);
+				screen_coords[i].y = HEIGHT-screen_coords[i].y;
+			}
+			
+			
+			
+			vec3 n = cross3(sub3(world_coords[2],world_coords[0]), sub3(world_coords[1], world_coords[0]));
+			n=normal3(n);
+			int intensity = (int)(dot3(n,lightdir)*255) ;
+			if(intensity>0) triangle(screen_coords, 0xFF000000 |intensity|(intensity<<8)|intensity<<16);
 		}
-		
-		
-		
-		vec3 n = cross3(sub3(world_coords[2],world_coords[0]), sub3(world_coords[1], world_coords[0]));
-		n=normal3(n);
-		int intensity = (int)(dot3(n,lightdir)*255) ;
-		if(intensity>0) triangle(screen_coords, 0xFF000000 |(int)(intensity*color)|(intensity<<8)|intensity<<16);
 	}
-	self.image = [[NSImage alloc] initWithCGImage:[imageRep CGImage] size:[imageRep size]];
 	camera.z+=0.1/30;
-	color += 0.05/30;
+	
 }
 
 @end

@@ -9,10 +9,7 @@
 #import <Foundation/Foundation.h>
 #include "vector.h"
 #import "Vectors.h"
+#import "Model.h"
 @interface OBJLoader : NSObject
-@property NSArray<Vec3f*>* vertices;
-@property NSArray<Vec3i*>* faces;
-@property int numFaces;
-@property int numVertices;
--(id) init:(NSString*) file;
++(Model*)createModelFromFile:(NSString *)file;
 @end

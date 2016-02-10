@@ -7,10 +7,11 @@
 //
 
 #import "OBJLoader.h"
+
 @implementation OBJLoader
 
--(id)init:(NSString *)file{
-	self = [super init];
++(Model*)createModelFromFile:(NSString *)file{
+	Model* model = [Model new];
 	NSString *objData = [NSString stringWithContentsOfFile:file];
 	int vertexCount = 0, faceCount = 0;
 	// Iterate through file once to discover how many vertices, normals, and faces there are
@@ -22,12 +23,12 @@
 	NSMutableArray<Vec3f*>* vertices = [NSMutableArray new];
 	NSMutableArray<Vec3i*>* faces= [NSMutableArray new];
 	
-	self.vertices = vertices;
-	self.faces = faces;
-	self.numFaces = faceCount;
-	self.numVertices = vertexCount;
+	model.vertices = vertices;
+	model.faces = faces;
+	model.numFaces = faceCount;
+	model.numVertices = vertexCount;
 	NSLog(@"vertices: %d, faces: %d",vertexCount,faceCount);
-	NSLog(@"Vertices ptr: %p", self.vertices);
+	NSLog(@"Vertices ptr: %p", model.vertices);
 	vertexCount = 0, faceCount = 0;
 	for(NSString* line in lines){
 		if([line hasPrefix:@"v "]){
@@ -65,6 +66,6 @@
 			
 		}
 	}
-	return self;
+	return model;
 }
 @end
