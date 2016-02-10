@@ -10,8 +10,8 @@
 
 @implementation OBJLoader
 
-+(Model*)createModelFromFile:(NSString *)file{
-	Model* model = [Model new];
++(void)createModelFromFile:(NSString *)file model:(Model*)model{
+	
 	NSString *objData = [NSString stringWithContentsOfFile:file];
 	int vertexCount = 0, faceCount = 0;
 	// Iterate through file once to discover how many vertices, normals, and faces there are
@@ -66,6 +66,6 @@
 			
 		}
 	}
-	return model;
+	
 }
 @end

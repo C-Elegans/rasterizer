@@ -11,5 +11,5 @@
 #import "Vectors.h"
 #import "Model.h"
 @interface OBJLoader : NSObject
-+(Model*)createModelFromFile:(NSString *)file;
++(void)createModelFromFile:(NSString *)file model:(Model*)model;
 @end

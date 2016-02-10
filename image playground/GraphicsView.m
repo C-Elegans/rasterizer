@@ -28,7 +28,7 @@ NSBitmapImageRep* imageRep;
 	
 	image_data = calloc(SIZE, sizeof(unsigned short));
 	models = [NSMutableArray new];
-	Model* model = [OBJLoader createModelFromFile:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"]];
+	Model* model = [[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){0,0,0}];
 	[models addObject:model];
 	zbuffer = calloc(HEIGHT*WIDTH, sizeof(float));
 	
@@ -180,8 +180,14 @@ vec3 to_screen(vec3 v){
 	GLKMatrix4 viewMatrix = GLKMatrix4MakePerspective(70 * (M_PI/180), WIDTH/HEIGHT, -0.1, -10);
 	GLKMatrix4 camearaMatrix = GLKMatrix4MakeLookAt(camera.x, camera.y, camera.z, center.x, center.y, center.z, 0, 1, 0);
 	for(Model* model in models){
-		GLKMatrix4 result = GLKMatrix4Multiply(GLKMatrix4Multiply(viewMatrix, Projection), camearaMatrix);
+		GLKMatrix4 result = GLKMatrix4Identity;
+		result = GLKMatrix4Multiply(result, [model getModelMatrix]);
+		result = GLKMatrix4Multiply(result, viewMatrix);
+		result = GLKMatrix4Multiply(result, [model getModelMatrix]);
+		result = GLKMatrix4Multiply(result, Projection);
+		result = GLKMatrix4Multiply(result, camearaMatrix);
 		
+		model.rotation = (vec3){model.rotation.x+ 0.1/30, model.rotation.y +0.1/30, model.rotation.z};
 		for (Vec3i *face in model.faces) {
 			
 			
@@ -205,10 +211,10 @@ vec3 to_screen(vec3 v){
 			vec3 n = cross3(sub3(world_coords[2],world_coords[0]), sub3(world_coords[1], world_coords[0]));
 			n=normal3(n);
 			int intensity = (int)(dot3(n,lightdir)*255) ;
-			if(intensity>0) triangle(screen_coords, 0xFF000000 |intensity|(intensity<<8)|intensity<<16);
+			if(intensity>0) triangle(screen_coords, 0x000000FF |(((intensity)|(intensity<<8)|(intensity<<16))<<8));
 		}
 	}
-	camera.z+=0.1/30;
+	//camera.z+=0.1/30;
 	
 }
 

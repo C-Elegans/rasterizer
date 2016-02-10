@@ -8,9 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #include "Vectors.h"
+#import <GLKit/GLKit.h>
 @interface Model : NSObject
 @property NSArray<Vec3f*>* vertices;
 @property NSArray<Vec3i*>* faces;
+@property vec3 position;
+@property vec3 rotation;
 @property int numFaces;
 @property int numVertices;
+-(id)initFromFile:(NSString*)file position:(vec3)pos rotation:(vec3)rot;
+-(GLKMatrix4)getModelMatrix;
 @end
