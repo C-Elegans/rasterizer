@@ -112,19 +112,22 @@ void minirender(vec3* vertices, int numvertices){
 	
 }
 -(void) render:(OBJLoader*)loader{
+	vec3 lightdir = (vec3){0,0,-1};
 	for (Vec3i *face in loader.faces) {
 		
 		
 		vec2i screen_coords[3];
-		
-		vec3 world_coords = [[loader.vertices objectAtIndex:face.x] toVec];
-		screen_coords[0] = (vec2i){(world_coords.x+1.)*WIDTH/2., HEIGHT-((world_coords.y+1.)*HEIGHT/2.)};
-		world_coords = [[loader.vertices objectAtIndex:face.y] toVec];
-		screen_coords[1] = (vec2i){(world_coords.x+1.)*WIDTH/2., HEIGHT-((world_coords.y+1.)*HEIGHT/2.)};
-		world_coords = [[loader.vertices objectAtIndex:face.z] toVec];
-		screen_coords[2] = (vec2i){(world_coords.x+1.)*WIDTH/2., HEIGHT-((world_coords.y+1.)*HEIGHT/2.)};
-
-		triangle(screen_coords, rand() | 0xFF000000);
+		vec3 world_coords[3];
+		world_coords[0] = [[loader.vertices objectAtIndex:face.x] toVec];
+		screen_coords[0] = (vec2i){(world_coords[0].x+1.)*WIDTH/2., HEIGHT-((world_coords[0].y+1.)*HEIGHT/2.)};
+		world_coords[1] = [[loader.vertices objectAtIndex:face.y] toVec];
+		screen_coords[1] = (vec2i){(world_coords[1].x+1.)*WIDTH/2., HEIGHT-((world_coords[1].y+1.)*HEIGHT/2.)};
+		world_coords[2] = [[loader.vertices objectAtIndex:face.z] toVec];
+		screen_coords[2] = (vec2i){(world_coords[2].x+1.)*WIDTH/2., HEIGHT-((world_coords[2].y+1.)*HEIGHT/2.)};
+		vec3 n = cross3(sub3(world_coords[2],world_coords[0]), sub3(world_coords[1], world_coords[0]));
+		n=normal3(n);
+		int intensity = (int)(dot3(n,lightdir)*255) ;
+		if(intensity>0) triangle(screen_coords, 0xFF000000 |intensity|(intensity<<8)|intensity<<16);
 	}
 	
 	

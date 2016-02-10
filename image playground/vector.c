@@ -7,6 +7,7 @@
 //
 
 #include "vector.h"
+#include <math.h>
 float cross2(vec2 a, vec2 b){
 	return (a.x*b.y)-(a.y*b.x);
 }
@@ -39,4 +40,14 @@ vec3 cross3(vec3 a, vec3 b){
 	
 	return ret;
 	
+}
+vec3 sub3(vec3 a, vec3 b){
+	return (vec3){a.x-b.x,a.y-b.y,a.z-b.z};
+}
+vec3 normal3(vec3 v){
+	float div = sqrtf(v.x*v.x+v.y*v.y+v.z*v.z);
+	return (vec3){v.x/div,v.y/div,v.z/div};
+}
+float dot3(vec3 a, vec3 b){
+	return a.x*b.x+a.y*b.y+a.z*b.z;
 }

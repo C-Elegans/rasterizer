@@ -43,4 +43,7 @@ vec2i iadd2(vec2i a, vec2i b);
 vec2i isub2(vec2i a, vec2i b);
 int idot2(vec2i a,vec2i b);
 vec3 cross3(vec3 a, vec3 b);
+vec3 sub3(vec3 a, vec3 b);
+vec3 normal3(vec3);
+float dot3(vec3,vec3);
 #endif /* vector_h */
