@@ -125,3 +125,6 @@ vec3 wdiv(vec4 v){
 	return (vec3){v.x/v.w,v.y/v.w,v.z/v.w};
 	return (vec3){v.x,v.y,v.z};
 }
+vec3 add3(vec3 a, vec3 b){
+	return (vec3){a.x+b.x, a.y+b.y, a.z+b.z};
+}

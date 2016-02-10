@@ -134,6 +134,9 @@ vec3 barycentric(vec3* pts, vec3 p){
 	if(fabsf(u.z)<1) return (vec3){-1,1,1};
 	return (vec3){1.f-(u.x+u.y)/u.z, u.y/u.z, u.x/u.z};
 }
+float orient2d(vec3 a, vec3 b, vec3 c){
+	return (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x);
+}
 void triangle(vec3* pts, int color){
 	vec2i bboxmin = (vec2i){WIDTH-1,  HEIGHT-1};
 	vec2i bboxmax = (vec2i){0, 0};
@@ -146,21 +149,31 @@ void triangle(vec3* pts, int color){
 		bboxmax.x = MIN(clamp.x, MAX(bboxmax.x, pts[i].x));
 		bboxmax.y = MIN(clamp.y, MAX(bboxmax.y, pts[i].y));
 	}
-	vec3 P;
 	
-	for (P.x=bboxmin.x; P.x<=bboxmax.x; P.x++) {
-		for (P.y=bboxmin.y; P.y<=bboxmax.y; P.y++) {
-			vec3 bc_screen  = barycentric(pts, P);
-			if (bc_screen.x<0 || bc_screen.y<0 || bc_screen.z<0) continue;
-			float z=0;
-			z += pts[0].z*bc_screen.x;
-			z += pts[1].z*bc_screen.y;
-			z += pts[2].z*bc_screen.z;
-			if(zbuffer[(int)(P.y*WIDTH+P.x)]<z){
-				set_pixel(P.x, P.y, color);
-				zbuffer[(int)(P.y*WIDTH+P.x)] = z;
+	
+	// Barycentric coordinates at minX/minY corner
+	vec3 P = (vec3){bboxmin.x, bboxmin.y,0};
+	vec3 row = barycentric(pts, P);
+	vec3 A = sub3(barycentric(pts, (vec3){P.x+1,P.y,P.z}),row);
+	vec3 B = sub3(barycentric(pts, (vec3){P.x,P.y+1,P.z}),row);
+	
+	for (P.y=bboxmin.y; P.y<=bboxmax.y; P.y++) {
+		vec3 w = row;
+		for (P.x=bboxmin.x; P.x<=bboxmax.x; P.x++) {
+			
+			//vec3 bc_screen  = barycentric(pts, P);
+			if ((w.x>0&&w.y>0&&w.z>0)){
+				float z=0;
+				vec3 ptsvec = (vec3){pts[0].z,pts[1].z,pts[2].z};
+				z = dot3(ptsvec, w);
+				if(zbuffer[(int)(P.y*WIDTH+P.x)]<z){
+					set_pixel(P.x, P.y, color);
+					zbuffer[(int)(P.y*WIDTH+P.x)] = z;
+				}
 			}
+			w = add3(w,A);
 		}
+		row = add3(row,B);
 	}
 	
 }

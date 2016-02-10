@@ -53,4 +53,5 @@ vec4 vecmul(vec4, float*);
 float* viewport(int x, int y, int w, int h, float* m);
 void lookat(vec3 eye, vec3 center, vec3 up, float* camera);
 vec3 wdiv(vec4);
+vec3 add3(vec3, vec3);
 #endif /* vector_h */
