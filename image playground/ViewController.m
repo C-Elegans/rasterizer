@@ -16,8 +16,8 @@
 @implementation ViewController
 int* image_data;
 float* zbuffer;
-vec3 camera = (vec3){1,1,-3};
-vec3 center = (vec3){0,0,0};
+vec3 camera = (vec3){-1,0,3};
+vec3 center = (vec3){0,0,-1};
 float color = 0.2;
 OBJLoader* loader;
 NSBitmapImageRep* imageRep;
@@ -125,25 +125,21 @@ void randpos(vec2i* ptr){
 	ptr[1] = (vec2i){rand()%640,rand()%480};
 	ptr[2] = (vec2i){rand()%640,rand()%480};
 }
-void minirender(vec3* vertices, int numvertices){
-	
+vec3 to_screen(vec3 v){
+	//return (vec3){v.x*(WIDTH/2) +(WIDTH/2), v.y*(HEIGHT/2) +(HEIGHT/2),v.z};
+	return (vec3){v.x*(WIDTH/2) +(WIDTH/2), v.y*(HEIGHT/2) +(HEIGHT/2),v.z};
 }
 -(void) render{
 	vec3 lightdir = (vec3){0,0,-1};
-	float projection[4][4];
-	mat_identity(projection);
+	
+	
 	GLKMatrix4 Projection = GLKMatrix4Identity;
-	Projection.m32 = -1.f/(normal3(sub3(camera, (vec3){0,0,0}))).x;
-	GLKMatrix4 viewMatrix = GLKMatrix4MakePerspective(70 * (180/M_PI), WIDTH/HEIGHT, 0.1, 100);
-	GLKMatrix4 cameara = GLKMatrix4MakeLookAt(camera.x, camera.y, camera.z, center.x, center.y, center.z, 0, 1, 0);
-	float view_mat[4][4] = {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};
-	float res[4][4];
-	float res2[4][4];
-	float mview[4][4];
-	viewport(WIDTH/8, HEIGHT/8, WIDTH*(3.0/4.0), HEIGHT*(3.0/4.0),&view_mat[0][0]);
-	matmul(view_mat, projection, res2);
-	lookat(camera, (vec3){0,0,0}, (vec3){0,1,0}, mview);
-	matmul(res2,mview, res);
+	Projection.m32 = 1.f/(normal3(sub3(camera, (vec3){0,0,0}))).z;
+	
+	GLKMatrix4 viewMatrix = GLKMatrix4MakePerspective(70 * (M_PI/180), WIDTH/HEIGHT, -0.1, -10);
+	GLKMatrix4 camearaMatrix = GLKMatrix4MakeLookAt(camera.x, camera.y, camera.z, center.x, center.y, center.z, 0, 1, 0);
+	GLKMatrix4 result = GLKMatrix4Multiply(GLKMatrix4Multiply(viewMatrix, Projection), camearaMatrix);
+	
 	for (Vec3i *face in loader.faces) {
 		
 		
@@ -153,8 +149,12 @@ void minirender(vec3* vertices, int numvertices){
 		world_coords[1] = [[loader.vertices objectAtIndex:face.y] toVec];
 		world_coords[2] = [[loader.vertices objectAtIndex:face.z] toVec];
 		for(int i=0;i<3;i++){
-			vec4 proj_coords = vecmul((vec4){world_coords[i].x,world_coords[i].y,world_coords[i].z,1}, &res[0][0]);
-			screen_coords[i] = wdiv(proj_coords);
+			//vec4 proj_coords = vecmul((vec4){world_coords[i].x,world_coords[i].y,world_coords[i].z,1}, result.m);
+			
+			GLKVector4 proj = GLKMatrix4MultiplyVector4(result, GLKVector4Make(world_coords[i].x,world_coords[i].y,world_coords[i].z,1));
+			
+			screen_coords[i] = wdiv((vec4){proj.x, proj.y, proj.z, proj.w});
+			screen_coords[i] = to_screen(screen_coords[i]);
 			screen_coords[i].y = HEIGHT-screen_coords[i].y;
 		}
 		
