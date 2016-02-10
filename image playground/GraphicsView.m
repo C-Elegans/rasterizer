@@ -8,6 +8,7 @@
 
 #import "GraphicsView.h"
 #import <GLKit/GLKit.h>
+#include <mmintrin.h>
 #import "Model.h"
 #define WIDTH 640
 #define HEIGHT 480
@@ -63,8 +64,11 @@ NSBitmapImageRep* imageRep;
 	memset(image_data, 0, SIZE);
 	memset(zbuffer,0,WIDTH*HEIGHT*sizeof(float));
 	// Random pixels will give you a non-organized RAINBOW
+	long start, stop;
+	start = mach_absolute_time();
 	[self render];
-	
+	stop = mach_absolute_time();
+	NSLog(@"frametime %.02f ms",(stop-start)/1000000.0);
 	// Provider
 	CGDataProviderRef provider = CGDataProviderCreateWithData(nil, image_data, SIZE, nil);
 	
@@ -187,7 +191,7 @@ vec3 to_screen(vec3 v){
 		result = GLKMatrix4Multiply(result, Projection);
 		result = GLKMatrix4Multiply(result, camearaMatrix);
 		
-		model.rotation = (vec3){model.rotation.x+ 0.1/30, model.rotation.y +0.1/30, model.rotation.z};
+		//model.rotation = (vec3){model.rotation.x+ 0.1/30, model.rotation.y +0.1/30, model.rotation.z};
 		for (Vec3i *face in model.faces) {
 			
 			
