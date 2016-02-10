@@ -14,6 +14,7 @@
 #define HEIGHT 480
 @implementation ViewController
 int* image_data;
+float* zbuffer;
 void render();
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -29,6 +30,7 @@ void render();
 	}
 	OBJLoader* loader = [[OBJLoader alloc]init:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"]];
 	image_data = (int*)[imageRep bitmapData];
+	zbuffer = calloc(HEIGHT*WIDTH, sizeof(float));
 	if(loader == nil)exit(-1);
 	[self render:loader];
 	
@@ -75,12 +77,12 @@ void line(vec3i a, vec3i b, int color){
 		if (e2 < dy) { err += dx; a.y += sy; }
 	}
 }
-vec3 barycentric(vec2i* pts, vec2i p){
+vec3 barycentric(vec3* pts, vec3 p){
 	vec3 u = cross3((vec3){pts[2].x-pts[0].x, pts[1].x-pts[0].x,pts[0].x-p.x}, (vec3){pts[2].y-pts[0].y, pts[1].y-pts[0].y, pts[0].y-p.y});
 	if(fabsf(u.z)<1) return (vec3){-1,1,1};
 	return (vec3){1.f-(u.x+u.y)/u.z, u.y/u.z, u.x/u.z};
 }
-void triangle(vec2i* pts, int color){
+void triangle(vec3* pts, int color){
 	vec2i bboxmin = (vec2i){WIDTH-1,  HEIGHT-1};
 	vec2i bboxmax = (vec2i){0, 0};
 	vec2i clamp = (vec2i){WIDTH-1, HEIGHT-1};
@@ -92,12 +94,20 @@ void triangle(vec2i* pts, int color){
 		bboxmax.x = MIN(clamp.x, MAX(bboxmax.x, pts[i].x));
 		bboxmax.y = MIN(clamp.y, MAX(bboxmax.y, pts[i].y));
 	}
-	vec2i P;
+	vec3 P;
+	
 	for (P.x=bboxmin.x; P.x<=bboxmax.x; P.x++) {
 		for (P.y=bboxmin.y; P.y<=bboxmax.y; P.y++) {
 			vec3 bc_screen  = barycentric(pts, P);
 			if (bc_screen.x<0 || bc_screen.y<0 || bc_screen.z<0) continue;
-			set_pixel(P.x, P.y, color);
+			float z=0;
+			z += pts[0].z*bc_screen.x;
+			z += pts[1].z*bc_screen.y;
+			z += pts[2].z*bc_screen.z;
+			if(zbuffer[(int)(P.y*WIDTH+P.x)]<z){
+				set_pixel(P.x, P.y, color);
+				zbuffer[(int)(P.y*WIDTH+P.x)] = z;
+			}
 		}
 	}
 	
@@ -116,14 +126,14 @@ void minirender(vec3* vertices, int numvertices){
 	for (Vec3i *face in loader.faces) {
 		
 		
-		vec2i screen_coords[3];
+		vec3 screen_coords[3];
 		vec3 world_coords[3];
 		world_coords[0] = [[loader.vertices objectAtIndex:face.x] toVec];
-		screen_coords[0] = (vec2i){(world_coords[0].x+1.)*WIDTH/2., HEIGHT-((world_coords[0].y+1.)*HEIGHT/2.)};
+		screen_coords[0] = (vec3){(world_coords[0].x+1.)*WIDTH/2., HEIGHT-((world_coords[0].y+1.)*HEIGHT/2.), world_coords[0].z};
 		world_coords[1] = [[loader.vertices objectAtIndex:face.y] toVec];
-		screen_coords[1] = (vec2i){(world_coords[1].x+1.)*WIDTH/2., HEIGHT-((world_coords[1].y+1.)*HEIGHT/2.)};
+		screen_coords[1] = (vec3){(world_coords[1].x+1.)*WIDTH/2., HEIGHT-((world_coords[1].y+1.)*HEIGHT/2.),world_coords[1].z};
 		world_coords[2] = [[loader.vertices objectAtIndex:face.z] toVec];
-		screen_coords[2] = (vec2i){(world_coords[2].x+1.)*WIDTH/2., HEIGHT-((world_coords[2].y+1.)*HEIGHT/2.)};
+		screen_coords[2] = (vec3){(world_coords[2].x+1.)*WIDTH/2., HEIGHT-((world_coords[2].y+1.)*HEIGHT/2.),world_coords[2].z};
 		vec3 n = cross3(sub3(world_coords[2],world_coords[0]), sub3(world_coords[1], world_coords[0]));
 		n=normal3(n);
 		int intensity = (int)(dot3(n,lightdir)*255) ;
