@@ -8,7 +8,7 @@
 
 #ifndef vector_h
 #define vector_h
-
+#define DEPTH 255
 typedef struct{
 	float x;
 	float y;
@@ -33,6 +33,7 @@ typedef struct{
 	float z;
 	float w;
 }vec4;
+
 typedef vec3i face;
 float cross2(vec2 a, vec2 b);
 vec2 add2(vec2 a, vec2 b);
@@ -46,4 +47,10 @@ vec3 cross3(vec3 a, vec3 b);
 vec3 sub3(vec3 a, vec3 b);
 vec3 normal3(vec3);
 float dot3(vec3,vec3);
+void mat_identity(float* mat);
+float* matmul(float* a, float* b, float* result);
+vec4 vecmul(vec4, float*);
+float* viewport(int x, int y, int w, int h, float* m);
+void lookat(vec3 eye, vec3 center, vec3 up, float* camera);
+vec3 wdiv(vec4);
 #endif /* vector_h */

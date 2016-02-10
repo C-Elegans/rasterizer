@@ -10,11 +10,17 @@
 #include <xmmintrin.h>
 #include <tmmintrin.h>
 #include <smmintrin.h>
+#import <GLKit/GLKit.h>
 #define WIDTH 640
 #define HEIGHT 480
 @implementation ViewController
 int* image_data;
 float* zbuffer;
+vec3 camera = (vec3){1,1,-3};
+vec3 center = (vec3){0,0,0};
+float color = 0.2;
+OBJLoader* loader;
+NSBitmapImageRep* imageRep;
 void render();
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -22,20 +28,21 @@ void render();
 	NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"fb" ofType:@"png"];
 	
 	self.image = [[NSImage alloc] initWithContentsOfFile:imagePath];
-	NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:[self.image TIFFRepresentation]];
+	imageRep = [NSBitmapImageRep imageRepWithData:[self.image TIFFRepresentation]];
 	NSLog(@"width: %ld, height: %ld",(long)[imageRep pixelsHigh],[imageRep pixelsWide]);
 	if([imageRep bitsPerPixel]!= 32){
 		NSLog(@"Cannot convert image, incorrect bits per pixel: %ld",[imageRep bitsPerPixel]);
 		exit(1);
 	}
-	OBJLoader* loader = [[OBJLoader alloc]init:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"]];
+	loader = [[OBJLoader alloc]init:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"]];
 	image_data = (int*)[imageRep bitmapData];
 	zbuffer = calloc(HEIGHT*WIDTH, sizeof(float));
 	if(loader == nil)exit(-1);
-	[self render:loader];
-	
-	self.image = [[NSImage alloc] initWithCGImage:[imageRep CGImage] size:[imageRep size]];
-	
+	[NSTimer scheduledTimerWithTimeInterval:1/30.0
+									 target:self
+								   selector:@selector(render)
+								   userInfo:nil
+									repeats:YES];
 	// Do any additional setup after loading the view.
 }
 
@@ -121,26 +128,47 @@ void randpos(vec2i* ptr){
 void minirender(vec3* vertices, int numvertices){
 	
 }
--(void) render:(OBJLoader*)loader{
+-(void) render{
 	vec3 lightdir = (vec3){0,0,-1};
+	float projection[4][4];
+	mat_identity(projection);
+	GLKMatrix4 Projection = GLKMatrix4Identity;
+	Projection.m32 = -1.f/(normal3(sub3(camera, (vec3){0,0,0}))).x;
+	GLKMatrix4 viewMatrix = GLKMatrix4MakePerspective(70 * (180/M_PI), WIDTH/HEIGHT, 0.1, 100);
+	GLKMatrix4 cameara = GLKMatrix4MakeLookAt(camera.x, camera.y, camera.z, center.x, center.y, center.z, 0, 1, 0);
+	float view_mat[4][4] = {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};
+	float res[4][4];
+	float res2[4][4];
+	float mview[4][4];
+	viewport(WIDTH/8, HEIGHT/8, WIDTH*(3.0/4.0), HEIGHT*(3.0/4.0),&view_mat[0][0]);
+	matmul(view_mat, projection, res2);
+	lookat(camera, (vec3){0,0,0}, (vec3){0,1,0}, mview);
+	matmul(res2,mview, res);
 	for (Vec3i *face in loader.faces) {
 		
 		
 		vec3 screen_coords[3];
 		vec3 world_coords[3];
 		world_coords[0] = [[loader.vertices objectAtIndex:face.x] toVec];
-		screen_coords[0] = (vec3){(world_coords[0].x+1.)*WIDTH/2., HEIGHT-((world_coords[0].y+1.)*HEIGHT/2.), world_coords[0].z};
 		world_coords[1] = [[loader.vertices objectAtIndex:face.y] toVec];
-		screen_coords[1] = (vec3){(world_coords[1].x+1.)*WIDTH/2., HEIGHT-((world_coords[1].y+1.)*HEIGHT/2.),world_coords[1].z};
 		world_coords[2] = [[loader.vertices objectAtIndex:face.z] toVec];
-		screen_coords[2] = (vec3){(world_coords[2].x+1.)*WIDTH/2., HEIGHT-((world_coords[2].y+1.)*HEIGHT/2.),world_coords[2].z};
+		for(int i=0;i<3;i++){
+			vec4 proj_coords = vecmul((vec4){world_coords[i].x,world_coords[i].y,world_coords[i].z,1}, &res[0][0]);
+			screen_coords[i] = wdiv(proj_coords);
+			screen_coords[i].y = HEIGHT-screen_coords[i].y;
+		}
+		
+		
+		
 		vec3 n = cross3(sub3(world_coords[2],world_coords[0]), sub3(world_coords[1], world_coords[0]));
 		n=normal3(n);
 		int intensity = (int)(dot3(n,lightdir)*255) ;
-		if(intensity>0) triangle(screen_coords, 0xFF000000 |intensity|(intensity<<8)|intensity<<16);
+		if(intensity>0) triangle(screen_coords, 0xFF000000 |(int)(intensity*color)|(intensity<<8)|intensity<<16);
 	}
-	
-	
+	self.image = [[NSImage alloc] initWithCGImage:[imageRep CGImage] size:[imageRep size]];
+	camera.z+=0.1/30;
+	camera.z -= 0.1/30;
+	color += 0.05/30;
 }
 
 @end

@@ -11,7 +11,7 @@
 #import "OBJLoader.h"
 @interface ViewController : NSViewController
 @property NSImage* image;
--(void) render:(OBJLoader*)loader;
+-(void) render;
 @end
 #include "vector.h"
 //				AABBGGRR
