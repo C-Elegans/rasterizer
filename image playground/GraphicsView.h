@@ -1,17 +1,17 @@
 //
-//  ViewController.h
+//  GraphicsView.h
 //  image playground
 //
-//  Created by Michael Nolan on 11/4/15.
-//  Copyright © 2015 Michael Nolan. All rights reserved.
+//  Created by Michael Nolan on 2/10/16.
+//  Copyright © 2016 Michael Nolan. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
-#import <Foundation/Foundation.h>
+#include "vector.h"
 #import "OBJLoader.h"
-@interface ViewController : NSViewController
+@interface GraphicsView : NSView
 @property NSImage* image;
-
+-(void) render;
 @end
 #include "vector.h"
 //				AABBGGRR
