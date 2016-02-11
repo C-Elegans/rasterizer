@@ -21,10 +21,10 @@
 int* image_data;
 float* zbuffer;
 NSMutableArray<Model*>* models;
-vec3 camera = (vec3){0,0,5};
+vec3 camera = (vec3){1,0,3};
 vec3 center = (vec3){0,0,0};
 vec3 lightdir = (vec3){0,0,-1};
-float color = 0.2;
+NSBitmapImageRep* imageRep;
 
 NSBitmapImageRep* imageRep;
 -(void) common_init{
@@ -33,7 +33,18 @@ NSBitmapImageRep* imageRep;
 	models = [NSMutableArray new];
 	Model* model = [[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){0,0,0}];
 	[models addObject:model];
-	[models addObject:[[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"floor" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){-M_PI/8,0,0}]];
+	
+	NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"african_head_diffuse" ofType:@"png"];
+	
+	self.image = [[NSImage alloc] initWithContentsOfFile:imagePath];
+	imageRep = [NSBitmapImageRep imageRepWithData:[self.image TIFFRepresentation]];
+	
+	head_diffuse.height = [self.image size].height;
+	head_diffuse.width = [self.image size].width;
+	head_diffuse.bytesperpixel = (int)[imageRep bitsPerPixel]/8;
+	
+	head_diffuse.data = (color*)[imageRep bitmapData];
+	//[models addObject:[[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"floor" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){-M_PI/8,0,0}]];
 	zbuffer = calloc(HEIGHT*WIDTH, sizeof(float));
 	
 }
@@ -140,7 +151,7 @@ vec3 barycentric(vec3* pts, vec3 p){
 float orient2d(vec3 a, vec3 b, vec3 c){
 	return (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x);
 }
-void triangle(vec3* pts, vec2* uvs, vec3* normals, int color){
+void triangle(vec3* pts, vec2* uvs, vec3* normals){
 	vec2i bboxmin = (vec2i){WIDTH-1,  HEIGHT-1};
 	vec2i bboxmax = (vec2i){0, 0};
 	vec2i clamp = (vec2i){WIDTH-1, HEIGHT-1};
@@ -172,7 +183,7 @@ void triangle(vec3* pts, vec2* uvs, vec3* normals, int color){
 				if(zbuffer[(int)(P.y*WIDTH+P.x)]<z){
 					vec2 uv = add2(add2(mul2(w.x,uvs[0]),mul2(w.y, uvs[1])),mul2(w.z, uvs[2]));
 					vec3 normal = add3(add3(mul3(w.x,normals[0]),mul3(w.y, normals[1])),mul3(w.z, normals[2]));
-					set_pixel(P.x, P.y, shade(uv, normal));
+					set_pixel(P.x, P.y,colorToInt(shade(uv, normal)));
 					
 					zbuffer[(int)(P.y*WIDTH+P.x)] = z;
 				}
@@ -239,11 +250,9 @@ vec3 to_screen(vec3 v){
 			
 			
 			
-			vec3 n = cross3(sub3(world_coords[2],world_coords[0]), sub3(world_coords[1], world_coords[0]));
-			n=normal3(n);
-			int intensity = (int)(dot3(n,lightdir)*255) ;
 			
-			if(intensity>0) triangle(screen_coords,texture_coords,normals, 0x000000FF |(((intensity>>1)|(intensity<<16))<<8));
+			
+			triangle(screen_coords,texture_coords,normals);
 		}
 	}
 	//camera.z+=0.1/30;

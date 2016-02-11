@@ -8,6 +8,7 @@
 
 #ifndef vector_h
 #define vector_h
+#include <stdint.h>
 #define DEPTH 255
 typedef struct{
 	float x;
@@ -33,7 +34,12 @@ typedef struct{
 	float z;
 	float w;
 }vec4;
-
+typedef struct{
+	uint8_t b;
+	uint8_t g;
+	uint8_t r;
+	uint8_t a;
+}color;
 
 float cross2(vec2 a, vec2 b);
 vec2 add2(vec2 a, vec2 b);
@@ -56,4 +62,6 @@ vec3 wdiv(vec4);
 vec3 add3(vec3, vec3);
 vec3 mul3(float, vec3);
 vec2 mul2(float, vec2);
+color mulColor(float, color);
+int colorToInt(color c);
 #endif /* vector_h */

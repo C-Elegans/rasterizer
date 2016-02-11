@@ -134,4 +134,9 @@ vec3 mul3(float a, vec3 b){
 vec2 mul2(float a, vec2 b){
 	return (vec2){a*b.x,a*b.y};
 }
-
+color mulColor(float a, color c){
+	return (color){(uint8_t)(c.r * a),(uint8_t)(c.g * a),(uint8_t)(c.b * a),c.a,};
+}
+int colorToInt(color c){
+	return c.r<<24|c.g<<16|c.b<<8|c.a;
+}

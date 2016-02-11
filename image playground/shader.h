@@ -9,5 +9,13 @@
 #ifndef shader_h
 #define shader_h
 #include "vector.h"
-int shade(vec2 uv, vec3 normal);
+
+color shade(vec2 uv, vec3 normal);
+typedef struct{
+	int width;
+	int height;
+	int bytesperpixel;
+	color* data;
+}texture;
+extern texture head_diffuse;
 #endif /* shader_h */

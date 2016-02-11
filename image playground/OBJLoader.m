@@ -44,7 +44,7 @@
 			//NSLog(@"V: %f, %@", [[lineVertices objectAtIndex:0]floatValue], [lineVertices objectAtIndex:0] );
 		}
 		else if([line hasPrefix:@"vt "]){
-			NSString *lineTrunc = [line substringFromIndex:3];
+			NSString *lineTrunc = [line substringFromIndex:4];
 			NSArray *lineVertices = [lineTrunc componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 			Vec2f* vertex = [Vec2f new];
 			vertex.x = [[lineVertices objectAtIndex:0] floatValue];
@@ -53,7 +53,7 @@
 			//NSLog(@"V: %f, %@", [[lineVertices objectAtIndex:0]floatValue], [lineVertices objectAtIndex:0] );
 		}
 		if([line hasPrefix:@"vn "]){
-			NSString *lineTrunc = [line substringFromIndex:3];
+			NSString *lineTrunc = [line substringFromIndex:4];
 			NSArray *lineVertices = [lineTrunc componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 			Vec3f* vertex = [Vec3f new];
 			vertex.x = [[lineVertices objectAtIndex:0] floatValue];
