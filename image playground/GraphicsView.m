@@ -220,7 +220,7 @@ vec3 to_screen(vec3 v){
 		result = GLKMatrix4Multiply(result, [model getModelMatrix]);
 		result = GLKMatrix4Multiply(result, Projection);
 		result = GLKMatrix4Multiply(result, camearaMatrix);
-		
+		vec3 toCamera = sub3(center, camera);
 		//model.rotation = (vec3){model.rotation.x+ 0.1/30, model.rotation.y +0.1/30, model.rotation.z};
 		for (Face *face in model.faces) {
 			
@@ -238,6 +238,8 @@ vec3 to_screen(vec3 v){
 			normals[0] = [[model.normals objectAtIndex:face.n1] toVec];
 			normals[1] = [[model.normals objectAtIndex:face.n2] toVec];
 			normals[2] = [[model.normals objectAtIndex:face.n3] toVec];
+			vec3 n = cross3(sub3(world_coords[1], world_coords[0]), sub3(world_coords[2], world_coords[0]));
+			if(dot3(n , toCamera)>0)continue;
 			for(int i=0;i<3;i++){
 				//vec4 proj_coords = vecmul((vec4){world_coords[i].x,world_coords[i].y,world_coords[i].z,1}, result.m);
 				
@@ -247,7 +249,6 @@ vec3 to_screen(vec3 v){
 				screen_coords[i] = to_screen(screen_coords[i]);
 				screen_coords[i].y = HEIGHT-screen_coords[i].y;
 			}
-			
 			
 			
 			
