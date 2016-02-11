@@ -20,8 +20,8 @@
 int* image_data;
 float* zbuffer;
 NSMutableArray<Model*>* models;
-vec3 camera = (vec3){-1,0,3};
-vec3 center = (vec3){0,0,-1};
+vec3 camera = (vec3){-1,10,13};
+vec3 center = (vec3){0,5,-1};
 float color = 0.2;
 
 NSBitmapImageRep* imageRep;
@@ -29,8 +29,9 @@ NSBitmapImageRep* imageRep;
 	
 	image_data = calloc(SIZE, sizeof(unsigned short));
 	models = [NSMutableArray new];
-	Model* model = [[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){0,0,0}];
+	Model* model = [[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"dragon" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){0,0,0}];
 	[models addObject:model];
+	[models addObject:[[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"floor" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){-M_PI/8,0,0}]];
 	zbuffer = calloc(HEIGHT*WIDTH, sizeof(float));
 	
 }
@@ -194,7 +195,7 @@ vec3 to_screen(vec3 v){
 	GLKMatrix4 Projection = GLKMatrix4Identity;
 	Projection.m32 = 1.f/(normal3(sub3(camera, (vec3){0,0,0}))).z;
 	
-	GLKMatrix4 viewMatrix = GLKMatrix4MakePerspective(70 * (M_PI/180), WIDTH/HEIGHT, -0.1, -10);
+	GLKMatrix4 viewMatrix = GLKMatrix4MakePerspective(70 * (M_PI/180), WIDTH/HEIGHT, -0.1, -100);
 	GLKMatrix4 camearaMatrix = GLKMatrix4MakeLookAt(camera.x, camera.y, camera.z, center.x, center.y, center.z, 0, 1, 0);
 	for(Model* model in models){
 		GLKMatrix4 result = GLKMatrix4Identity;
@@ -228,7 +229,8 @@ vec3 to_screen(vec3 v){
 			vec3 n = cross3(sub3(world_coords[2],world_coords[0]), sub3(world_coords[1], world_coords[0]));
 			n=normal3(n);
 			int intensity = (int)(dot3(n,lightdir)*255) ;
-			if(intensity>0) triangle(screen_coords, 0x000000FF |(((intensity)|(intensity<<8)|(intensity<<16))<<8));
+			
+			if(intensity>0) triangle(screen_coords, 0x000000FF |(((intensity>>1)|(intensity<<16))<<8));
 		}
 	}
 	//camera.z+=0.1/30;

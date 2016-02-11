@@ -15,7 +15,8 @@
 @end
 #include "vector.h"
 //				AABBGGRR
-#define GREEN 0xff00FF00
+#define GREEN 0x00FF00FF
 #define RED 0xFF0000FF
-#define BLUE 0xFFFF0000
+#define BLUE 0x0x0000FFFF
 #define MAGENTA 0xFFFF00FF
+#define PURPLE 0x8400FF

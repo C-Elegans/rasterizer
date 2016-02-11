@@ -19,6 +19,7 @@
 }
 -(GLKMatrix4)getModelMatrix{
 	GLKMatrix4 matrix = GLKMatrix4Identity;
+	
 	matrix = GLKMatrix4RotateX(matrix, self.rotation.x);
 	matrix = GLKMatrix4RotateY(matrix, self.rotation.y);
 	matrix = GLKMatrix4RotateZ(matrix, self.rotation.z);
