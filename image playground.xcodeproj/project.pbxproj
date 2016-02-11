@@ -17,6 +17,7 @@
 		0AB7540F1C6A9A82004C65A6 /* OBJLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB7540E1C6A9A82004C65A6 /* OBJLoader.m */; };
 		0AB754111C6A9F2A004C65A6 /* african_head.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0AB754101C6A9F2A004C65A6 /* african_head.obj */; };
 		0AB754141C6AB0DB004C65A6 /* Vectors.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB754131C6AB0DB004C65A6 /* Vectors.m */; };
+		0AC3971B1C6C227C008D077E /* shader.c in Sources */ = {isa = PBXBuildFile; fileRef = 0AC397191C6C227C008D077E /* shader.c */; };
 		0AC8FBB41BEAA409008A818B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB31BEAA409008A818B /* AppDelegate.m */; };
 		0AC8FBB71BEAA409008A818B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB61BEAA409008A818B /* main.m */; };
 		0AC8FBBA1BEAA409008A818B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB91BEAA409008A818B /* ViewController.m */; };
@@ -54,6 +55,8 @@
 		0AB754101C6A9F2A004C65A6 /* african_head.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = african_head.obj; sourceTree = "<group>"; };
 		0AB754121C6AB0DB004C65A6 /* Vectors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vectors.h; sourceTree = "<group>"; };
 		0AB754131C6AB0DB004C65A6 /* Vectors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vectors.m; sourceTree = "<group>"; };
+		0AC397191C6C227C008D077E /* shader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = shader.c; sourceTree = "<group>"; };
+		0AC3971A1C6C227C008D077E /* shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
 		0AC8FBAF1BEAA408008A818B /* image playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "image playground.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AC8FBB21BEAA409008A818B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0AC8FBB31BEAA409008A818B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -119,6 +122,8 @@
 				0AC8FBD61BEAA8D4008A818B /* image.png */,
 				0AC8FBD41BEAA8C0008A818B /* image_large.png */,
 				0AC8FBB21BEAA409008A818B /* AppDelegate.h */,
+				0AC397191C6C227C008D077E /* shader.c */,
+				0AC3971A1C6C227C008D077E /* shader.h */,
 				0AB7540A1C6A34B5004C65A6 /* vector.c */,
 				0AB7540B1C6A34B5004C65A6 /* vector.h */,
 				0AC8FBB31BEAA409008A818B /* AppDelegate.m */,
@@ -268,6 +273,7 @@
 				0AB7540F1C6A9A82004C65A6 /* OBJLoader.m in Sources */,
 				0AB754141C6AB0DB004C65A6 /* Vectors.m in Sources */,
 				0A31869B1C6BD955004787F3 /* Model.m in Sources */,
+				0AC3971B1C6C227C008D077E /* shader.c in Sources */,
 				0AC8FBBA1BEAA409008A818B /* ViewController.m in Sources */,
 				0AC8FBB71BEAA409008A818B /* main.m in Sources */,
 				0A3186981C6BD301004787F3 /* GraphicsView.m in Sources */,

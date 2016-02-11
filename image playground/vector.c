@@ -128,3 +128,10 @@ vec3 wdiv(vec4 v){
 vec3 add3(vec3 a, vec3 b){
 	return (vec3){a.x+b.x, a.y+b.y, a.z+b.z};
 }
+vec3 mul3(float a, vec3 b){
+	return (vec3){a*b.x,a*b.y, a*b.z};
+}
+vec2 mul2(float a, vec2 b){
+	return (vec2){a*b.x,a*b.y};
+}
+

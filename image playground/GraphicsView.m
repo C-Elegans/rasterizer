@@ -10,6 +10,7 @@
 #import <GLKit/GLKit.h>
 #include <mmintrin.h>
 #import "Model.h"
+#include "shader.h"
 #define WIDTH 640
 #define HEIGHT 480
 #define BYTES_PER_PIXEL 4
@@ -20,8 +21,8 @@
 int* image_data;
 float* zbuffer;
 NSMutableArray<Model*>* models;
-vec3 camera = (vec3){-1,10,13};
-vec3 center = (vec3){0,5,-1};
+vec3 camera = (vec3){0,0,5};
+vec3 center = (vec3){0,0,0};
 float color = 0.2;
 
 NSBitmapImageRep* imageRep;
@@ -29,7 +30,7 @@ NSBitmapImageRep* imageRep;
 	
 	image_data = calloc(SIZE, sizeof(unsigned short));
 	models = [NSMutableArray new];
-	Model* model = [[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"dragon" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){0,0,0}];
+	Model* model = [[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){0,0,0}];
 	[models addObject:model];
 	[models addObject:[[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"floor" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){-M_PI/8,0,0}]];
 	zbuffer = calloc(HEIGHT*WIDTH, sizeof(float));
@@ -138,7 +139,7 @@ vec3 barycentric(vec3* pts, vec3 p){
 float orient2d(vec3 a, vec3 b, vec3 c){
 	return (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x);
 }
-void triangle(vec3* pts, int color){
+void triangle(vec3* pts, vec2* uvs, vec3* normals, int color){
 	vec2i bboxmin = (vec2i){WIDTH-1,  HEIGHT-1};
 	vec2i bboxmax = (vec2i){0, 0};
 	vec2i clamp = (vec2i){WIDTH-1, HEIGHT-1};
@@ -168,7 +169,9 @@ void triangle(vec3* pts, int color){
 				vec3 ptsvec = (vec3){pts[0].z,pts[1].z,pts[2].z};
 				z = dot3(ptsvec, w);
 				if(zbuffer[(int)(P.y*WIDTH+P.x)]<z){
-					set_pixel(P.x, P.y, color);
+					vec2 uv = add2(add2(mul2(w.x,uvs[0]),mul2(w.y, uvs[1])),mul2(w.z, uvs[2]));
+					set_pixel(P.x, P.y, shade(uv, (vec3){0,0,0}));
+					
 					zbuffer[(int)(P.y*WIDTH+P.x)] = z;
 				}
 			}
@@ -206,14 +209,22 @@ vec3 to_screen(vec3 v){
 		result = GLKMatrix4Multiply(result, camearaMatrix);
 		
 		//model.rotation = (vec3){model.rotation.x+ 0.1/30, model.rotation.y +0.1/30, model.rotation.z};
-		for (Vec3i *face in model.faces) {
+		for (Face *face in model.faces) {
 			
 			
 			vec3 screen_coords[3];
 			vec3 world_coords[3];
-			world_coords[0] = [[model.vertices objectAtIndex:face.x] toVec];
-			world_coords[1] = [[model.vertices objectAtIndex:face.y] toVec];
-			world_coords[2] = [[model.vertices objectAtIndex:face.z] toVec];
+			vec2 texture_coords[3];
+			vec3 normals[3];
+			world_coords[0] = [[model.vertices objectAtIndex:face.v1] toVec];
+			world_coords[1] = [[model.vertices objectAtIndex:face.v2] toVec];
+			world_coords[2] = [[model.vertices objectAtIndex:face.v3] toVec];
+			texture_coords[0] = [[model.uvs objectAtIndex:face.uv1] toVec];
+			texture_coords[1] = [[model.uvs objectAtIndex:face.uv2] toVec];
+			texture_coords[2] = [[model.uvs objectAtIndex:face.uv3] toVec];
+			normals[0] = [[model.normals objectAtIndex:face.n1] toVec];
+			normals[1] = [[model.normals objectAtIndex:face.n2] toVec];
+			normals[2] = [[model.normals objectAtIndex:face.n3] toVec];
 			for(int i=0;i<3;i++){
 				//vec4 proj_coords = vecmul((vec4){world_coords[i].x,world_coords[i].y,world_coords[i].z,1}, result.m);
 				
@@ -230,7 +241,7 @@ vec3 to_screen(vec3 v){
 			n=normal3(n);
 			int intensity = (int)(dot3(n,lightdir)*255) ;
 			
-			if(intensity>0) triangle(screen_coords, 0x000000FF |(((intensity>>1)|(intensity<<16))<<8));
+			if(intensity>0) triangle(screen_coords,texture_coords,normals, 0x000000FF |(((intensity>>1)|(intensity<<16))<<8));
 		}
 	}
 	//camera.z+=0.1/30;

@@ -13,9 +13,19 @@
 	return (vec3){_x,_y,_z};
 }
 @end
+@implementation Vec2f : NSObject
+-(vec2)toVec{
+	return (vec2){_x,_y};
+}
+@end
 @implementation Vec3i :NSObject;
 
 -(vec3i)toVec{
 	return (vec3i){_x,_y,_z};
 }
+
+@end
+@implementation Face:NSObject
+
+
 @end

@@ -9,9 +9,12 @@
 #import <Foundation/Foundation.h>
 #include "Vectors.h"
 #import <GLKit/GLKit.h>
+
 @interface Model : NSObject
 @property NSArray<Vec3f*>* vertices;
-@property NSArray<Vec3i*>* faces;
+@property NSArray<Face*>* faces;
+@property NSArray<Vec2f*>* uvs;
+@property NSArray<Vec3f*>* normals;
 @property vec3 position;
 @property vec3 rotation;
 @property int numFaces;
