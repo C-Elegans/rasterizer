@@ -151,7 +151,8 @@ vec3 barycentric(vec3* pts, vec3 p){
 float orient2d(vec3 a, vec3 b, vec3 c){
 	return (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x);
 }
-void triangle(vec3* pts, vec2* uvs, vec3* normals){
+
+void triangle(vec3* pts, vec2* uvs, vec3* normals, vec3* pos){
 	vec2i bboxmin = (vec2i){WIDTH-1,  HEIGHT-1};
 	vec2i bboxmax = (vec2i){0, 0};
 	vec2i clamp = (vec2i){WIDTH-1, HEIGHT-1};
@@ -183,7 +184,8 @@ void triangle(vec3* pts, vec2* uvs, vec3* normals){
 				if(zbuffer[(int)(P.y*WIDTH+P.x)]<z){
 					vec2 uv = add2(add2(mul2(w.x,uvs[0]),mul2(w.y, uvs[1])),mul2(w.z, uvs[2]));
 					vec3 normal = add3(add3(mul3(w.x,normals[0]),mul3(w.y, normals[1])),mul3(w.z, normals[2]));
-					set_pixel(P.x, P.y,colorToInt(shade(uv, normal)));
+					vec3 position = add3(add3(mul3(w.x,pos[0]),mul3(w.y, pos[1])),mul3(w.z, pos[2]));
+					set_pixel(P.x, P.y,colorToInt(shade(uv, normal,position)));
 					
 					zbuffer[(int)(P.y*WIDTH+P.x)] = z;
 				}
@@ -253,7 +255,7 @@ vec3 to_screen(vec3 v){
 			
 			
 			
-			triangle(screen_coords,texture_coords,normals);
+			triangle(screen_coords,texture_coords,normals, world_coords);
 		}
 	}
 	//camera.z+=0.1/30;

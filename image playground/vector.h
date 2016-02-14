@@ -40,7 +40,7 @@ typedef struct{
 	uint8_t r;
 	uint8_t a;
 }color;
-
+uint8_t sadd8(uint8_t a, uint8_t b);
 float cross2(vec2 a, vec2 b);
 vec2 add2(vec2 a, vec2 b);
 vec2 sub2(vec2 a, vec2 b);
@@ -64,4 +64,5 @@ vec3 mul3(float, vec3);
 vec2 mul2(float, vec2);
 color mulColor(float, color);
 int colorToInt(color c);
+color addColor(color a, color b);
 #endif /* vector_h */

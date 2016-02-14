@@ -10,7 +10,7 @@
 #define shader_h
 #include "vector.h"
 
-color shade(vec2 uv, vec3 normal);
+color shade(vec2 uv, vec3 normal, vec3 pos);
 typedef struct{
 	int width;
 	int height;

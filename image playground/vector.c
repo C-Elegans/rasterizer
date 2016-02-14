@@ -140,3 +140,8 @@ color mulColor(float a, color c){
 int colorToInt(color c){
 	return c.r<<24|c.g<<16|c.b<<8|c.a;
 }
+color addColor(color a, color b){
+	return (color){sadd8(a.b, b.b),sadd8(a.g, b.g),sadd8(a.r, b.r),sadd8(a.a, b.a)};
+}
+uint8_t sadd8(uint8_t a, uint8_t b)
+{ return (a > 0xFF - b) ? 0xFF : a + b; }

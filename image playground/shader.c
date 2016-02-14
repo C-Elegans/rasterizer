@@ -10,6 +10,7 @@
 #include <math.h>
 extern vec3 lightdir;
 texture head_diffuse;
+extern vec3 camera;
 color gammaCorrect(color c){
 	c.r = powf((c.r/255.0),1/2.5);
 	c.g = powf((c.r/255.0),1/2.5);
@@ -28,14 +29,18 @@ color texture2D(vec2 coords, texture t){
 	
 	return gammaCorrect((color){col>>24,(col>>16) &255,(col>>8)&255,255});
 }
-color shade(vec2 uv, vec3 normal){
+color shade(vec2 uv, vec3 normal, vec3 pos){
 	float f = -dot3(normal, lightdir);
 	if(f<0)return (color){0,0,0,0};
+	float spec = dot3(normal3(sub3(camera,pos)), normal);
+	spec = powf(spec, 20);
+	color s = mulColor(.5*spec, (color){255,255,255,255});
 	
 	color c = texture2D(uv, head_diffuse);
 	uint8_t temp = c.r;
 	c.r = c.b;
 	c.b = temp;
 	c= mulColor(f, c);
+	c=addColor(c, s);
 	return c;
 }
