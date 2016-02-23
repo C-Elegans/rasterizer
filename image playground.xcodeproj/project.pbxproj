@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0A16D6521C68E19900C6D183 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A16D6511C68E19900C6D183 /* fb.png */; };
-		0A16D6541C68E36200C6D183 /* fb.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A16D6531C68E36200C6D183 /* fb.tiff */; };
-		0A2007C71C6BFC62007C48F1 /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0A2007C61C6BFC62007C48F1 /* floor.obj */; };
 		0A3186981C6BD301004787F3 /* GraphicsView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0A3186971C6BD301004787F3 /* GraphicsView.mm */; };
 		0A31869B1C6BD955004787F3 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A31869A1C6BD955004787F3 /* Model.m */; };
 		0A95AD991C6BFDDF009AFFB0 /* dragon.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0A95AD981C6BFDDF009AFFB0 /* dragon.obj */; };
@@ -41,8 +39,6 @@
 
 /* Begin PBXFileReference section */
 		0A16D6511C68E19900C6D183 /* fb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb.png; sourceTree = "<group>"; };
-		0A16D6531C68E36200C6D183 /* fb.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = fb.tiff; sourceTree = "<group>"; };
-		0A2007C61C6BFC62007C48F1 /* floor.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor.obj; sourceTree = "<group>"; };
 		0A3186961C6BD301004787F3 /* GraphicsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicsView.h; sourceTree = "<group>"; };
 		0A3186971C6BD301004787F3 /* GraphicsView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsView.mm; sourceTree = "<group>"; };
 		0A3186991C6BD955004787F3 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
@@ -124,10 +120,8 @@
 			isa = PBXGroup;
 			children = (
 				0AC3971C1C6D2372008D077E /* african_head_diffuse.png */,
-				0A2007C61C6BFC62007C48F1 /* floor.obj */,
 				0A95AD981C6BFDDF009AFFB0 /* dragon.obj */,
 				0AB754101C6A9F2A004C65A6 /* african_head.obj */,
-				0A16D6531C68E36200C6D183 /* fb.tiff */,
 				0A16D6511C68E19900C6D183 /* fb.png */,
 				0AC8FBDC1BEADAE4008A818B /* rgbtest.png */,
 				0AC8FBD61BEAA8D4008A818B /* image.png */,
@@ -256,11 +250,9 @@
 				0AC8FBBF1BEAA409008A818B /* Main.storyboard in Resources */,
 				0AC8FBD71BEAA8D4008A818B /* image.png in Resources */,
 				0AC8FBDD1BEADAE4008A818B /* rgbtest.png in Resources */,
-				0A16D6541C68E36200C6D183 /* fb.tiff in Resources */,
 				0A95AD991C6BFDDF009AFFB0 /* dragon.obj in Resources */,
 				0AB754111C6A9F2A004C65A6 /* african_head.obj in Resources */,
 				0AC3971D1C6D2372008D077E /* african_head_diffuse.png in Resources */,
-				0A2007C71C6BFC62007C48F1 /* floor.obj in Resources */,
 				0A16D6521C68E19900C6D183 /* fb.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -209,60 +209,121 @@ vec3 to_screen(vec3 v){
 	//return (vec3){v.x*(WIDTH/2) +(WIDTH/2), v.y*(HEIGHT/2) +(HEIGHT/2),v.z};
 	return (vec3){v.x*(WIDTH/2) +(WIDTH/2), v.y*(HEIGHT/2) +(HEIGHT/2),v.z};
 }
+-(BOOL)points:(vec3*)points inBox:(CGRect)rect{
+	for(int i=0;i<3;i++){
+		vec3 point =  points[i];
+		if(point.x>=rect.origin.x && point.x<=rect.origin.x+rect.size.width){
+			if(point.y>=rect.origin.y && point.y<=rect.origin.y+rect.size.height){
+				return YES;
+			}
+		}
+	}
+	return NO;
+}
+-(void)renderFaces:(NSArray<Face*>*) array model:(Model*)model matrix:(GLKMatrix4)mat{
+	vec3 toCamera = sub3(center, camera);
+	for (Face *face in array) {
+		
+		
+		vec3 screen_coords[3];
+		vec3 world_coords[3];
+		vec2 texture_coords[3];
+		vec3 normals[3];
+		world_coords[0] = [[model.vertices objectAtIndex:face.v1] toVec];
+		world_coords[1] = [[model.vertices objectAtIndex:face.v2] toVec];
+		world_coords[2] = [[model.vertices objectAtIndex:face.v3] toVec];
+		texture_coords[0] = [[model.uvs objectAtIndex:face.uv1] toVec];
+		texture_coords[1] = [[model.uvs objectAtIndex:face.uv2] toVec];
+		texture_coords[2] = [[model.uvs objectAtIndex:face.uv3] toVec];
+		normals[0] = [[model.normals objectAtIndex:face.n1] toVec];
+		normals[1] = [[model.normals objectAtIndex:face.n2] toVec];
+		normals[2] = [[model.normals objectAtIndex:face.n3] toVec];
+		vec3 n = cross3(sub3(world_coords[1], world_coords[0]), sub3(world_coords[2], world_coords[0]));
+		if(dot3(n , toCamera)>0)continue;
+		for(int i=0;i<3;i++){
+			//vec4 proj_coords = vecmul((vec4){world_coords[i].x,world_coords[i].y,world_coords[i].z,1}, result.m);
+			
+			GLKVector4 proj = GLKMatrix4MultiplyVector4(mat, GLKVector4Make(world_coords[i].x,world_coords[i].y,world_coords[i].z,1));
+			
+			screen_coords[i] = wdiv((vec4){proj.x, proj.y, proj.z, proj.w});
+			screen_coords[i] = to_screen(screen_coords[i]);
+			screen_coords[i].y = HEIGHT-screen_coords[i].y;
+		}
+		
+		
+		
+		
+		triangle(screen_coords,texture_coords,normals, world_coords);
+	}
+	
+}
 -(void) render{
 	
-	
+	vec3 toCamera = sub3(center, camera);
 	
 	GLKMatrix4 Projection = GLKMatrix4Identity;
 	Projection.m32 = 1.f/(normal3(sub3(camera, (vec3){0,0,0}))).z;
 	
 	GLKMatrix4 viewMatrix = GLKMatrix4MakePerspective(70 * (M_PI/180), WIDTH/HEIGHT, -0.1, -100);
 	GLKMatrix4 camearaMatrix = GLKMatrix4MakeLookAt(camera.x, camera.y, camera.z, center.x, center.y, center.z, 0, 1, 0);
+	NSMutableArray<Face*>* bin1 = [NSMutableArray new];
+	NSMutableArray<Face*>* bin2 = [NSMutableArray new];
+	NSMutableArray<Face*>* bin3 = [NSMutableArray new];
+	NSMutableArray<Face*>* bin4 = [NSMutableArray new];
+	CGRect box1 = CGRectMake(0, 0, WIDTH/2, HEIGHT/2);
+	CGRect box2 = CGRectMake(WIDTH/2, 0, WIDTH/2, HEIGHT/2);
+	CGRect box3 = CGRectMake(0, HEIGHT/2, WIDTH/2, HEIGHT/2);
+	CGRect box4 = CGRectMake(WIDTH/2, HEIGHT/2, WIDTH/2, HEIGHT/2);
 	for(Model* model in models){
 		GLKMatrix4 result = GLKMatrix4Identity;
 		result = GLKMatrix4Multiply(result, [model getModelMatrix]);
 		result = GLKMatrix4Multiply(result, viewMatrix);
 		result = GLKMatrix4Multiply(result, Projection);
 		result = GLKMatrix4Multiply(result, camearaMatrix);
-		vec3 toCamera = sub3(center, camera);
-		//model.rotation = (vec3){model.rotation.x+ 0.1/30, model.rotation.y +0.1/30, model.rotation.z};
-		for (Face *face in model.faces) {
-			
-			
-			vec3 screen_coords[3];
-			vec3 world_coords[3];
-			vec2 texture_coords[3];
-			vec3 normals[3];
+		
+		
+		vec3 screen_coords[3];
+		vec3 world_coords[3];
+		for(Face* face in model.faces){
 			world_coords[0] = [[model.vertices objectAtIndex:face.v1] toVec];
 			world_coords[1] = [[model.vertices objectAtIndex:face.v2] toVec];
 			world_coords[2] = [[model.vertices objectAtIndex:face.v3] toVec];
-			texture_coords[0] = [[model.uvs objectAtIndex:face.uv1] toVec];
-			texture_coords[1] = [[model.uvs objectAtIndex:face.uv2] toVec];
-			texture_coords[2] = [[model.uvs objectAtIndex:face.uv3] toVec];
-			normals[0] = [[model.normals objectAtIndex:face.n1] toVec];
-			normals[1] = [[model.normals objectAtIndex:face.n2] toVec];
-			normals[2] = [[model.normals objectAtIndex:face.n3] toVec];
 			vec3 n = cross3(sub3(world_coords[1], world_coords[0]), sub3(world_coords[2], world_coords[0]));
 			if(dot3(n , toCamera)>0)continue;
 			for(int i=0;i<3;i++){
-				//vec4 proj_coords = vecmul((vec4){world_coords[i].x,world_coords[i].y,world_coords[i].z,1}, result.m);
-				
 				GLKVector4 proj = GLKMatrix4MultiplyVector4(result, GLKVector4Make(world_coords[i].x,world_coords[i].y,world_coords[i].z,1));
 				
 				screen_coords[i] = wdiv((vec4){proj.x, proj.y, proj.z, proj.w});
 				screen_coords[i] = to_screen(screen_coords[i]);
 				screen_coords[i].y = HEIGHT-screen_coords[i].y;
+				
 			}
+			if([self points:&screen_coords[0] inBox:box1])[bin1 addObject:face];
+			if([self points:&screen_coords[0] inBox:box2])[bin2 addObject:face];
+			if([self points:&screen_coords[0] inBox:box3])[bin3 addObject:face];
+			if([self points:&screen_coords[0] inBox:box4])[bin4 addObject:face];
 			
-			
-			
-			
-			triangle(screen_coords,texture_coords,normals, world_coords);
 		}
-		model.rotation = add3(model.rotation, (vec3){0,0.001,0});
+		dispatch_group_t group = dispatch_group_create();
+		dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			[self renderFaces:bin1 model:model matrix:result];
+			 });
+		dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			[self renderFaces:bin2 model:model matrix:result];
+		});
+		dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			[self renderFaces:bin3 model:model matrix:result];
+		});
+		dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			[self renderFaces:bin4 model:model matrix:result];
+		});
+		dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+		//model.rotation = (vec3){model.rotation.x+ 0.1/30, model.rotation.y +0.1/30, model.rotation.z};
 	}
+	
 	//camera.z+=0.1/30;
 	
 }
+
 
 @end
