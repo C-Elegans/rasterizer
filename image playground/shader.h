@@ -8,7 +8,7 @@
 
 #ifndef shader_h
 #define shader_h
-#include "vector.h"
+#include "vector.hpp"
 
 color shade(vec2 uv, vec3 normal, vec3 pos);
 typedef struct{

@@ -7,13 +7,13 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#include "vector.h"
+#include "vector.hpp"
 #import "OBJLoader.h"
 @interface GraphicsView : NSView
 @property NSImage* image;
 -(void) render;
 @end
-#include "vector.h"
+#include "vector.hpp"
 //				AABBGGRR
 #define GREEN 0x00FF00FF
 #define RED 0xFF0000FF

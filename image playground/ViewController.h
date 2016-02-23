@@ -13,7 +13,7 @@
 @property NSImage* image;
 
 @end
-#include "vector.h"
+#include "vector.hpp"
 //				AABBGGRR
 #define GREEN 0xff00FF00
 #define RED 0xFF0000FF

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Michael Nolan. All rights reserved.
 //
 
-#include "vector.h"
+#include "vector.hpp"
 #include <math.h>
 #include <string.h>
 float cross2(vec2 a, vec2 b){
@@ -103,8 +103,8 @@ void lookat(vec3 eye, vec3 center, vec3 up, float* camera) {
 	vec3 y = normal3(cross3(z,x));
 	float Minv[4][4];
 	float Tr[4][4];
-	mat_identity(Minv);
-	mat_identity(Tr);
+	mat_identity(&Minv[0][0]);
+	mat_identity(&Tr[0][0]);
 
 	Minv[0][0] = x.x;
 	Minv[1][0] = y.x;
@@ -118,7 +118,7 @@ void lookat(vec3 eye, vec3 center, vec3 up, float* camera) {
 	Minv[1][2] = y.z;
 	Minv[2][2] = z.z;
 	Tr[2][3] = -center.z;
-	matmul(Minv, Tr, camera);
+	matmul(&Minv[0][0], &Tr[0][0], camera);
 }
 vec3 wdiv(vec4 v){
 	if(v.w != 0)

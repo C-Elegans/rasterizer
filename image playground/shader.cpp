@@ -27,20 +27,20 @@ color texture2D(vec2 coords, texture t){
 	
 	int col= (int)(data[t.bytesperpixel*(y*t.height + x)]);
 	
-	return gammaCorrect((color){col>>24,(col>>16) &255,(col>>8)&255,255});
+	return gammaCorrect((color){static_cast<uint8_t>(col>>24),static_cast<uint8_t>((col>>16) &255),static_cast<uint8_t>((col>>8)&255),255});
 }
 color shade(vec2 uv, vec3 normal, vec3 pos){
 	float f = -dot3(normal, lightdir);
 	if(f<0)return (color){0,0,0,0};
-	float spec = dot3(normal3(sub3(camera,pos)), normal);
-	spec = powf(spec, 20);
-	color s = mulColor(.5*spec, (color){255,255,255,255});
+	//float spec = dot3(normal3(sub3(camera,pos)), normal);
+	//spec = powf(spec, 20);
+	//color s = mulColor(.5*spec, (color){255,255,255,255});
 	
 	color c = texture2D(uv, head_diffuse);
 	uint8_t temp = c.r;
 	c.r = c.b;
 	c.b = temp;
-	c= mulColor(f, c);
-	c=addColor(c, s);
+	c= mulColor(f+0.05, c);
+	//c=addColor(c, s);
 	return c;
 }

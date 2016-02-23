@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#include "vector.h"
+#include "vector.hpp"
 #import "Vectors.h"
 #import "Model.h"
 @interface OBJLoader : NSObject

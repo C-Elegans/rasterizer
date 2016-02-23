@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#include "vector.h"
+#include "vector.hpp"
 @interface Vec3f : NSObject
 @property float x;
 @property float y;

@@ -11,6 +11,9 @@
 #include <mmintrin.h>
 #import "Model.h"
 #include "shader.h"
+
+#include <mach/mach.h>
+#include <mach/mach_time.h>
 #define WIDTH 640
 #define HEIGHT 480
 #define BYTES_PER_PIXEL 4
@@ -26,10 +29,10 @@ vec3 center = (vec3){0,0,0};
 vec3 lightdir = (vec3){0,0,-1};
 NSBitmapImageRep* imageRep;
 
-NSBitmapImageRep* imageRep;
+
 -(void) common_init{
 	
-	image_data = calloc(SIZE, sizeof(unsigned short));
+	image_data = (int *)calloc(SIZE, sizeof(unsigned short));
 	models = [NSMutableArray new];
 	Model* model = [[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"african_head" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){0,0,0}];
 	[models addObject:model];
@@ -45,7 +48,7 @@ NSBitmapImageRep* imageRep;
 	
 	head_diffuse.data = (color*)[imageRep bitmapData];
 	//[models addObject:[[Model alloc] initFromFile:[[NSBundle mainBundle]pathForResource:@"floor" ofType:@"obj"] position:(vec3) {0,0,0} rotation:(vec3){-M_PI/8,0,0}]];
-	zbuffer = calloc(HEIGHT*WIDTH, sizeof(float));
+	zbuffer = (float*)calloc(HEIGHT*WIDTH, sizeof(float));
 	
 }
 - (id)initWithFrame:(NSRect)frame
@@ -167,7 +170,7 @@ void triangle(vec3* pts, vec2* uvs, vec3* normals, vec3* pos){
 	
 	
 	// Barycentric coordinates at minX/minY corner
-	vec3 P = (vec3){bboxmin.x, bboxmin.y,0};
+	vec3 P = (vec3){static_cast<float>(bboxmin.x), static_cast<float>(bboxmin.y),0};
 	vec3 row = barycentric(pts, P);
 	vec3 A = sub3(barycentric(pts, (vec3){P.x+1,P.y,P.z}),row);
 	vec3 B = sub3(barycentric(pts, (vec3){P.x,P.y+1,P.z}),row);
@@ -219,7 +222,6 @@ vec3 to_screen(vec3 v){
 		GLKMatrix4 result = GLKMatrix4Identity;
 		result = GLKMatrix4Multiply(result, [model getModelMatrix]);
 		result = GLKMatrix4Multiply(result, viewMatrix);
-		result = GLKMatrix4Multiply(result, [model getModelMatrix]);
 		result = GLKMatrix4Multiply(result, Projection);
 		result = GLKMatrix4Multiply(result, camearaMatrix);
 		vec3 toCamera = sub3(center, camera);
@@ -257,6 +259,7 @@ vec3 to_screen(vec3 v){
 			
 			triangle(screen_coords,texture_coords,normals, world_coords);
 		}
+		model.rotation = add3(model.rotation, (vec3){0,0.001,0});
 	}
 	//camera.z+=0.1/30;
 	

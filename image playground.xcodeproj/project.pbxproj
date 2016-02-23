@@ -10,14 +10,14 @@
 		0A16D6521C68E19900C6D183 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A16D6511C68E19900C6D183 /* fb.png */; };
 		0A16D6541C68E36200C6D183 /* fb.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0A16D6531C68E36200C6D183 /* fb.tiff */; };
 		0A2007C71C6BFC62007C48F1 /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0A2007C61C6BFC62007C48F1 /* floor.obj */; };
-		0A3186981C6BD301004787F3 /* GraphicsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3186971C6BD301004787F3 /* GraphicsView.m */; };
+		0A3186981C6BD301004787F3 /* GraphicsView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0A3186971C6BD301004787F3 /* GraphicsView.mm */; };
 		0A31869B1C6BD955004787F3 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A31869A1C6BD955004787F3 /* Model.m */; };
 		0A95AD991C6BFDDF009AFFB0 /* dragon.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0A95AD981C6BFDDF009AFFB0 /* dragon.obj */; };
-		0AB7540C1C6A34B5004C65A6 /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 0AB7540A1C6A34B5004C65A6 /* vector.c */; };
+		0AB7540C1C6A34B5004C65A6 /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AB7540A1C6A34B5004C65A6 /* vector.cpp */; };
 		0AB7540F1C6A9A82004C65A6 /* OBJLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB7540E1C6A9A82004C65A6 /* OBJLoader.m */; };
 		0AB754111C6A9F2A004C65A6 /* african_head.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0AB754101C6A9F2A004C65A6 /* african_head.obj */; };
 		0AB754141C6AB0DB004C65A6 /* Vectors.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB754131C6AB0DB004C65A6 /* Vectors.m */; };
-		0AC3971B1C6C227C008D077E /* shader.c in Sources */ = {isa = PBXBuildFile; fileRef = 0AC397191C6C227C008D077E /* shader.c */; };
+		0AC3971B1C6C227C008D077E /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AC397191C6C227C008D077E /* shader.cpp */; };
 		0AC3971D1C6D2372008D077E /* african_head_diffuse.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC3971C1C6D2372008D077E /* african_head_diffuse.png */; };
 		0AC8FBB41BEAA409008A818B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB31BEAA409008A818B /* AppDelegate.m */; };
 		0AC8FBB71BEAA409008A818B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8FBB61BEAA409008A818B /* main.m */; };
@@ -44,18 +44,18 @@
 		0A16D6531C68E36200C6D183 /* fb.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = fb.tiff; sourceTree = "<group>"; };
 		0A2007C61C6BFC62007C48F1 /* floor.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor.obj; sourceTree = "<group>"; };
 		0A3186961C6BD301004787F3 /* GraphicsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicsView.h; sourceTree = "<group>"; };
-		0A3186971C6BD301004787F3 /* GraphicsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphicsView.m; sourceTree = "<group>"; };
+		0A3186971C6BD301004787F3 /* GraphicsView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsView.mm; sourceTree = "<group>"; };
 		0A3186991C6BD955004787F3 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		0A31869A1C6BD955004787F3 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
 		0A95AD981C6BFDDF009AFFB0 /* dragon.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dragon.obj; sourceTree = "<group>"; };
-		0AB7540A1C6A34B5004C65A6 /* vector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vector.c; sourceTree = "<group>"; };
-		0AB7540B1C6A34B5004C65A6 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = "<group>"; };
+		0AB7540A1C6A34B5004C65A6 /* vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vector.cpp; sourceTree = "<group>"; };
+		0AB7540B1C6A34B5004C65A6 /* vector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vector.hpp; sourceTree = "<group>"; };
 		0AB7540D1C6A9A82004C65A6 /* OBJLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBJLoader.h; sourceTree = "<group>"; };
 		0AB7540E1C6A9A82004C65A6 /* OBJLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBJLoader.m; sourceTree = "<group>"; };
 		0AB754101C6A9F2A004C65A6 /* african_head.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = african_head.obj; sourceTree = "<group>"; };
 		0AB754121C6AB0DB004C65A6 /* Vectors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vectors.h; sourceTree = "<group>"; };
 		0AB754131C6AB0DB004C65A6 /* Vectors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Vectors.m; sourceTree = "<group>"; };
-		0AC397191C6C227C008D077E /* shader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = shader.c; sourceTree = "<group>"; };
+		0AC397191C6C227C008D077E /* shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shader.cpp; sourceTree = "<group>"; };
 		0AC3971A1C6C227C008D077E /* shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
 		0AC3971C1C6D2372008D077E /* african_head_diffuse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = african_head_diffuse.png; sourceTree = "<group>"; };
 		0AC3971F1C6D370F008D077E /* image playground.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = "image playground.profdata"; sourceTree = "<group>"; };
@@ -132,10 +132,10 @@
 				0AC8FBDC1BEADAE4008A818B /* rgbtest.png */,
 				0AC8FBD61BEAA8D4008A818B /* image.png */,
 				0AC8FBB21BEAA409008A818B /* AppDelegate.h */,
-				0AC397191C6C227C008D077E /* shader.c */,
+				0AC397191C6C227C008D077E /* shader.cpp */,
 				0AC3971A1C6C227C008D077E /* shader.h */,
-				0AB7540A1C6A34B5004C65A6 /* vector.c */,
-				0AB7540B1C6A34B5004C65A6 /* vector.h */,
+				0AB7540A1C6A34B5004C65A6 /* vector.cpp */,
+				0AB7540B1C6A34B5004C65A6 /* vector.hpp */,
 				0AC8FBB31BEAA409008A818B /* AppDelegate.m */,
 				0AC8FBB81BEAA409008A818B /* ViewController.h */,
 				0AC8FBB91BEAA409008A818B /* ViewController.m */,
@@ -148,7 +148,7 @@
 				0AB754121C6AB0DB004C65A6 /* Vectors.h */,
 				0AB754131C6AB0DB004C65A6 /* Vectors.m */,
 				0A3186961C6BD301004787F3 /* GraphicsView.h */,
-				0A3186971C6BD301004787F3 /* GraphicsView.m */,
+				0A3186971C6BD301004787F3 /* GraphicsView.mm */,
 				0A3186991C6BD955004787F3 /* Model.h */,
 				0A31869A1C6BD955004787F3 /* Model.m */,
 			);
@@ -279,14 +279,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AB7540C1C6A34B5004C65A6 /* vector.c in Sources */,
+				0AB7540C1C6A34B5004C65A6 /* vector.cpp in Sources */,
 				0AB7540F1C6A9A82004C65A6 /* OBJLoader.m in Sources */,
 				0AB754141C6AB0DB004C65A6 /* Vectors.m in Sources */,
 				0A31869B1C6BD955004787F3 /* Model.m in Sources */,
-				0AC3971B1C6C227C008D077E /* shader.c in Sources */,
+				0AC3971B1C6C227C008D077E /* shader.cpp in Sources */,
 				0AC8FBBA1BEAA409008A818B /* ViewController.m in Sources */,
 				0AC8FBB71BEAA409008A818B /* main.m in Sources */,
-				0A3186981C6BD301004787F3 /* GraphicsView.m in Sources */,
+				0A3186981C6BD301004787F3 /* GraphicsView.mm in Sources */,
 				0AC8FBB41BEAA409008A818B /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
