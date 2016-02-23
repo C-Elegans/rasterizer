@@ -155,13 +155,13 @@ float orient2d(vec3 a, vec3 b, vec3 c){
 	return (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x);
 }
 
-void triangle(vec3* pts, vec2* uvs, vec3* normals, vec3* pos){
+void triangle(vec3* pts, vec2* uvs, vec3* normals, vec3* pos, CGRect box){
 	vec2i bboxmin = (vec2i){WIDTH-1,  HEIGHT-1};
-	vec2i bboxmax = (vec2i){0, 0};
-	vec2i clamp = (vec2i){WIDTH-1, HEIGHT-1};
+	vec2i bboxmax = (vec2i){(int)box.origin.x, (int)box.origin.y};
+	vec2i clamp = (vec2i){static_cast<int>(box.origin.x + box.size.width), static_cast<int>(box.origin.y + box.size.height)};
 	for (int i=0; i<3; i++) {
-		bboxmin.x = MAX(0,        MIN(bboxmin.x, pts[i].x));
-		bboxmin.y = MAX(0,        MIN(bboxmin.y, pts[i].y));
+		bboxmin.x = MAX(box.origin.x,        MIN(bboxmin.x, pts[i].x));
+		bboxmin.y = MAX(box.origin.y,        MIN(bboxmin.y, pts[i].y));
 		
 		
 		bboxmax.x = MIN(clamp.x, MAX(bboxmax.x, pts[i].x));
@@ -220,7 +220,7 @@ vec3 to_screen(vec3 v){
 	}
 	return NO;
 }
--(void)renderFaces:(NSArray<Face*>*) array model:(Model*)model matrix:(GLKMatrix4)mat{
+-(void)renderFaces:(NSArray<Face*>*) array model:(Model*)model matrix:(GLKMatrix4)mat box:(CGRect) rect{
 	vec3 toCamera = sub3(center, camera);
 	for (Face *face in array) {
 		
@@ -253,7 +253,7 @@ vec3 to_screen(vec3 v){
 		
 		
 		
-		triangle(screen_coords,texture_coords,normals, world_coords);
+		triangle(screen_coords,texture_coords,normals, world_coords,rect);
 	}
 	
 }
@@ -306,16 +306,16 @@ vec3 to_screen(vec3 v){
 		}
 		dispatch_group_t group = dispatch_group_create();
 		dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			[self renderFaces:bin1 model:model matrix:result];
+			[self renderFaces:bin1 model:model matrix:result box:box1];
 			 });
 		dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			[self renderFaces:bin2 model:model matrix:result];
+			[self renderFaces:bin2 model:model matrix:result box:box2];
 		});
 		dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			[self renderFaces:bin3 model:model matrix:result];
+			[self renderFaces:bin3 model:model matrix:result box:box3];
 		});
 		dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			[self renderFaces:bin4 model:model matrix:result];
+			[self renderFaces:bin4 model:model matrix:result box:box4];
 		});
 		dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 		//model.rotation = (vec3){model.rotation.x+ 0.1/30, model.rotation.y +0.1/30, model.rotation.z};
