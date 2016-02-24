@@ -10,8 +10,9 @@
 #import <GLKit/GLKit.h>
 #include <mmintrin.h>
 #import "Model.h"
-#include "shader.h"
-
+#include "shader.hpp"
+#include "newVector.hpp"
+#include <math.h>
 #include <mach/mach.h>
 #include <mach/mach_time.h>
 #define WIDTH 640
@@ -24,9 +25,9 @@
 int* image_data;
 float* zbuffer;
 NSMutableArray<Model*>* models;
-vec3 camera = (vec3){1,0,3};
-vec3 center = (vec3){0,0,0};
-vec3 lightdir = (vec3){0,0,-1};
+vec3f camera = vec3f(1,0,3);
+vec3f center = vec3f(0,0,0);
+vec3f lightdir = vec3f(0,0,-1);
 NSBitmapImageRep* imageRep;
 
 
@@ -117,7 +118,7 @@ void set_pixel(int x, int y, int color){
 	int* ptr = image_data;
 	ptr += y*WIDTH;
 	ptr += x;
-	*ptr = color;
+	*ptr = RED;
 }
 void fill_row(int x0,int x1, int y, int color){
 	int* ptr = image_data;
@@ -146,56 +147,59 @@ void line(vec3i a, vec3i b, int color){
 		if (e2 < dy) { err += dx; a.y += sy; }
 	}
 }
-vec3 barycentric(vec3* pts, vec3 p){
-	vec3 u = cross3((vec3){pts[2].x-pts[0].x, pts[1].x-pts[0].x,pts[0].x-p.x}, (vec3){pts[2].y-pts[0].y, pts[1].y-pts[0].y, pts[0].y-p.y});
-	if(fabsf(u.z)<1) return (vec3){-1,1,1};
-	return (vec3){1.f-(u.x+u.y)/u.z, u.y/u.z, u.x/u.z};
+vec3f barycentric(vec3f* pts, vec3f p){
+	vec3f u = cross(vec3f(pts[2].x()-pts[0].x(), pts[1].x()-pts[0].x(),pts[0].x()-p.x()), vec3f(pts[2].y()-pts[0].y(), pts[1].y()-pts[0].y(), pts[0].y()-p.y()));
+	
+	if(fabsf(u.z())<1) return vec3f(-1,1,1);
+	return  vec3f(1.f-(u.x()+u.y()), u.y(), u.x())/u.z();
 }
 float orient2d(vec3 a, vec3 b, vec3 c){
 	return (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x);
 }
 
-void triangle(vec3* pts, vec2* uvs, vec3* normals, vec3* pos, CGRect box){
+void triangle(vec3f* pts, vec3f* uvs, vec3f* normals, vec3f* pos, CGRect box){
 	vec2i bboxmin = (vec2i){WIDTH-1,  HEIGHT-1};
 	vec2i bboxmax = (vec2i){(int)box.origin.x, (int)box.origin.y};
 	vec2i clamp = (vec2i){static_cast<int>(box.origin.x + box.size.width), static_cast<int>(box.origin.y + box.size.height)};
+	
 	for (int i=0; i<3; i++) {
-		bboxmin.x = MAX(box.origin.x,        MIN(bboxmin.x, pts[i].x));
-		bboxmin.y = MAX(box.origin.y,        MIN(bboxmin.y, pts[i].y));
+		bboxmin.x = MAX(box.origin.x,        MIN(bboxmin.x, pts[i].x()));
+		bboxmin.y = MAX(box.origin.y,        MIN(bboxmin.y, pts[i].y()));
 		
 		
-		bboxmax.x = MIN(clamp.x, MAX(bboxmax.x, pts[i].x));
-		bboxmax.y = MIN(clamp.y, MAX(bboxmax.y, pts[i].y));
+		bboxmax.x = MIN(clamp.x, MAX(bboxmax.x, pts[i].x()));
+		bboxmax.y = MIN(clamp.y, MAX(bboxmax.y, pts[i].y()));
 	}
 	
 	
 	// Barycentric coordinates at minX/minY corner
-	vec3 P = (vec3){static_cast<float>(bboxmin.x), static_cast<float>(bboxmin.y),0};
-	vec3 row = barycentric(pts, P);
-	vec3 A = sub3(barycentric(pts, (vec3){P.x+1,P.y,P.z}),row);
-	vec3 B = sub3(barycentric(pts, (vec3){P.x,P.y+1,P.z}),row);
+	vec3f P = vec3f(static_cast<float>(bboxmin.x), static_cast<float>(bboxmin.y),0);
+	vec3f row = barycentric(pts, P);
+	vec3f A = barycentric(pts, vec3f(P.x()+1,P.y(),P.z()))-row;
+	vec3f B = barycentric(pts, vec3f(P.x(),P.y()+1,P.z()))-row;
 	
-	for (P.y=bboxmin.y; P.y<=bboxmax.y; P.y++) {
-		vec3 w = row;
-		for (P.x=bboxmin.x; P.x<=bboxmax.x; P.x++) {
+	for (P.setY(bboxmin.y); P.y()<=bboxmax.y; P+=vec3f(0,1,0)) {
+		vec3f w = row;
+		for (P.setX(bboxmin.x); P.x()<=bboxmax.x; P+=vec3f(1,0,0)) {
 			
 			//vec3 bc_screen  = barycentric(pts, P);
-			if ((w.x>0&&w.y>0&&w.z>0)){
+			if ((w.x()>0&&w.y()>0&&w.z()>0)){
 				float z=0;
-				vec3 ptsvec = (vec3){pts[0].z,pts[1].z,pts[2].z};
-				z = dot3(ptsvec, w);
-				if(zbuffer[(int)(P.y*WIDTH+P.x)]<z){
-					vec2 uv = add2(add2(mul2(w.x,uvs[0]),mul2(w.y, uvs[1])),mul2(w.z, uvs[2]));
-					vec3 normal = add3(add3(mul3(w.x,normals[0]),mul3(w.y, normals[1])),mul3(w.z, normals[2]));
-					vec3 position = add3(add3(mul3(w.x,pos[0]),mul3(w.y, pos[1])),mul3(w.z, pos[2]));
-					set_pixel(P.x, P.y,colorToInt(shade(uv, normal,position)));
+				vec3f ptsvec = vec3f(pts[0].z(),pts[1].z(),pts[2].z());
+				z = dot(ptsvec, w);
+				//if(zbuffer[(int)(P.y()*WIDTH+P.x())]>z){
 					
-					zbuffer[(int)(P.y*WIDTH+P.x)] = z;
-				}
+					vec3f uv = w.x()*uvs[0] + w.y() * uvs[1] + w.z() * uvs[2];
+					vec3f normal = w.x()*normals[0] + w.y() * normals[1] + w.z() * normals[2];
+					vec3f position = w.x()*pos[0] + w.y() * pos[1] + w.z() * pos[2];
+					set_pixel(P.x(), P.y(),colorToInt(shade(uv, normal,position)));
+					
+					zbuffer[(int)(P.y()*WIDTH+P.x())] = z;
+				//}
 			}
-			w = add3(w,A);
+			w += A;
 		}
-		row = add3(row,B);
+		row += B;
 	}
 	
 }
@@ -205,15 +209,15 @@ void randpos(vec2i* ptr){
 	ptr[1] = (vec2i){rand()%640,rand()%480};
 	ptr[2] = (vec2i){rand()%640,rand()%480};
 }
-vec3 to_screen(vec3 v){
+vec3f to_screen(vec3f v){
 	//return (vec3){v.x*(WIDTH/2) +(WIDTH/2), v.y*(HEIGHT/2) +(HEIGHT/2),v.z};
-	return (vec3){v.x*(WIDTH/2) +(WIDTH/2), v.y*(HEIGHT/2) +(HEIGHT/2),v.z};
+	return (v*vec3f(WIDTH/2,HEIGHT/2,1))+vec3f(WIDTH/2,HEIGHT/2,0);
 }
--(BOOL)points:(vec3*)points inBox:(CGRect)rect{
+-(BOOL)points:(vec3f*)points inBox:(CGRect)rect{
 	for(int i=0;i<3;i++){
-		vec3 point =  points[i];
-		if(point.x>=rect.origin.x && point.x<=rect.origin.x+rect.size.width){
-			if(point.y>=rect.origin.y && point.y<=rect.origin.y+rect.size.height){
+		vec3f point =  points[i];
+		if(point.x()>=rect.origin.x && point.x()<=rect.origin.x+rect.size.width){
+			if(point.y()>=rect.origin.y && point.y()<=rect.origin.y+rect.size.height){
 				return YES;
 			}
 		}
@@ -221,14 +225,14 @@ vec3 to_screen(vec3 v){
 	return NO;
 }
 -(void)renderFaces:(NSArray<Face*>*) array model:(Model*)model matrix:(GLKMatrix4)mat box:(CGRect) rect{
-	vec3 toCamera = sub3(center, camera);
+	vec3f toCamera = center- camera;
 	for (Face *face in array) {
 		
 		
-		vec3 screen_coords[3];
-		vec3 world_coords[3];
-		vec2 texture_coords[3];
-		vec3 normals[3];
+		vec3f screen_coords[3];
+		vec3f world_coords[3];
+		vec3f texture_coords[3];
+		vec3f normals[3];
 		world_coords[0] = [[model.vertices objectAtIndex:face.v1] toVec];
 		world_coords[1] = [[model.vertices objectAtIndex:face.v2] toVec];
 		world_coords[2] = [[model.vertices objectAtIndex:face.v3] toVec];
@@ -238,16 +242,16 @@ vec3 to_screen(vec3 v){
 		normals[0] = [[model.normals objectAtIndex:face.n1] toVec];
 		normals[1] = [[model.normals objectAtIndex:face.n2] toVec];
 		normals[2] = [[model.normals objectAtIndex:face.n3] toVec];
-		vec3 n = cross3(sub3(world_coords[1], world_coords[0]), sub3(world_coords[2], world_coords[0]));
-		if(dot3(n , toCamera)>0)continue;
+		//vec3f n = cross(world_coords[1]- world_coords[0], world_coords[2]- world_coords[0]);
+		//if(dot(n , toCamera)>0)continue;
 		for(int i=0;i<3;i++){
 			//vec4 proj_coords = vecmul((vec4){world_coords[i].x,world_coords[i].y,world_coords[i].z,1}, result.m);
 			
-			GLKVector4 proj = GLKMatrix4MultiplyVector4(mat, GLKVector4Make(world_coords[i].x,world_coords[i].y,world_coords[i].z,1));
+			GLKVector4 proj = GLKMatrix4MultiplyVector4(mat, GLKVector4Make(world_coords[i].x(),world_coords[i].y(),world_coords[i].z(),1));
 			
-			screen_coords[i] = wdiv((vec4){proj.x, proj.y, proj.z, proj.w});
+			screen_coords[i] = vec3f(proj.x, proj.y, proj.z)/proj.w;
 			screen_coords[i] = to_screen(screen_coords[i]);
-			screen_coords[i].y = HEIGHT-screen_coords[i].y;
+			screen_coords[i].setY( HEIGHT-screen_coords[i].y());
 		}
 		
 		
@@ -264,13 +268,13 @@ NSMutableArray<Face*>* bin4 = [NSMutableArray new];
 
 -(void) render{
 	
-	vec3 toCamera = sub3(center, camera);
+	vec3f toCamera = center- camera;
 	
 	GLKMatrix4 Projection = GLKMatrix4Identity;
-	Projection.m32 = 1.f/(normal3(sub3(camera, (vec3){0,0,0}))).z;
-	
+	Projection.m32 = 1.f/(normal3((camera, (vec3){0,0,0}))).z;
+	Projection.m32 = 1.0/(camera-vec3f()).normalize().z();
 	GLKMatrix4 viewMatrix = GLKMatrix4MakePerspective(70 * (M_PI/180), WIDTH/HEIGHT, -0.1, -100);
-	GLKMatrix4 camearaMatrix = GLKMatrix4MakeLookAt(camera.x, camera.y, camera.z, center.x, center.y, center.z, 0, 1, 0);
+	GLKMatrix4 camearaMatrix = GLKMatrix4MakeLookAt(camera.x(), camera.y(), camera.z(), center.x(), center.y(), center.z(), 0, 1, 0);
 	CGRect box1 = CGRectMake(0, 0, WIDTH/2, HEIGHT/2);
 	CGRect box2 = CGRectMake(WIDTH/2, 0, WIDTH/2, HEIGHT/2);
 	CGRect box3 = CGRectMake(0, HEIGHT/2, WIDTH/2, HEIGHT/2);
@@ -287,20 +291,21 @@ NSMutableArray<Face*>* bin4 = [NSMutableArray new];
 		result = GLKMatrix4Multiply(result, camearaMatrix);
 		
 		
-		vec3 screen_coords[3];
-		vec3 world_coords[3];
+		
+		vec3f screen_coords[3];
+		vec3f world_coords[3];
 		for(Face* face in model.faces){
 			world_coords[0] = [[model.vertices objectAtIndex:face.v1] toVec];
 			world_coords[1] = [[model.vertices objectAtIndex:face.v2] toVec];
 			world_coords[2] = [[model.vertices objectAtIndex:face.v3] toVec];
-			vec3 n = cross3(sub3(world_coords[1], world_coords[0]), sub3(world_coords[2], world_coords[0]));
-			if(dot3(n , toCamera)>0)continue;
+			//vec3f n = cross(world_coords[1]- world_coords[0], world_coords[2]- world_coords[0]);
+			//if(dot(n , toCamera)>0)continue;
 			for(int i=0;i<3;i++){
-				GLKVector4 proj = GLKMatrix4MultiplyVector4(result, GLKVector4Make(world_coords[i].x,world_coords[i].y,world_coords[i].z,1));
+				GLKVector4 proj = GLKMatrix4MultiplyVector4(result, GLKVector4Make(world_coords[i].x(),world_coords[i].y(),world_coords[i].z(),1));
 				
-				screen_coords[i] = wdiv((vec4){proj.x, proj.y, proj.z, proj.w});
+				screen_coords[i] = vec3f(proj.x, proj.y, proj.z)/proj.w;
 				screen_coords[i] = to_screen(screen_coords[i]);
-				screen_coords[i].y = HEIGHT-screen_coords[i].y;
+				screen_coords[i].setY( HEIGHT-screen_coords[i].y());
 				
 			}
 			if([self points:&screen_coords[0] inBox:box1])[bin1 addObject:face];

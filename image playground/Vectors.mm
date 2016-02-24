@@ -9,13 +9,13 @@
 #import "Vectors.h"
 
 @implementation Vec3f : NSObject 
--(vec3)toVec{
-	return (vec3){_x,_y,_z};
+-(vec3f)toVec{
+	return vec3f(_x,_y,_z);
 }
 @end
 @implementation Vec2f : NSObject
--(vec2)toVec{
-	return (vec2){_x,_y};
+-(vec3f)toVec{
+	return vec3f(_x,_y,0);
 }
 @end
 @implementation Vec3i :NSObject;

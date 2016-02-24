@@ -7,18 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#include "newVector.hpp"
 #include "vector.hpp"
 @interface Vec3f : NSObject
 @property float x;
 @property float y;
 @property float z;
--(vec3) toVec;
+-(vec3f) toVec;
 @end
 @interface Vec2f : NSObject
 @property float x;
 @property float y;
 
--(vec2) toVec;
+-(vec3f) toVec;
 @end
 @interface Vec3i : NSObject
 @property int x;

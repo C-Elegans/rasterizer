@@ -8,9 +8,9 @@
 
 #ifndef shader_h
 #define shader_h
-#include "vector.hpp"
+#include "newVector.hpp"
 
-color shade(vec2 uv, vec3 normal, vec3 pos);
+color shade(vec3f uv, vec3f normal, vec3f pos);
 typedef struct{
 	int width;
 	int height;
