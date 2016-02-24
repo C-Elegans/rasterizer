@@ -182,14 +182,12 @@ void triangle(vec3f* pts, vec3f* uvs, vec3f* normals, vec3f* pos, CGRect box){
 	for (P.setY(bboxmin.y); P.y()<=bboxmax.y; P+=vec3f(0,1,0)) {
 		vec3f w = row;
 		for (P.setX(bboxmin.x); P.x()<=bboxmax.x; P+=vec3f(1,0,0)) {
-			int c =0x3F3F3fff;
-			if (w.x() >0) c |= RED;
-			if (w.y() >0) c |= GREEN;
-			if (w.z() >0) c |= BLUE;
+			int c = w.x() >0 ? 0xFFFF00FF :0x0000FFFF;
+			
 			
 			
 			//vec3 bc_screen  = barycentric(pts, P);
-			if ((w.x()>0&&w.y()<0&&w.z()<0)){
+			if ((w.y()>0&&w.z()>0)){
 				
 				float z=0;
 				vec3f ptsvec = vec3f(pts[0].z(),pts[1].z(),pts[2].z());
@@ -203,7 +201,7 @@ void triangle(vec3f* pts, vec3f* uvs, vec3f* normals, vec3f* pos, CGRect box){
 					set_pixel(P.x(), P.y(), c);
 					zbuffer[(int)(P.y()*WIDTH+P.x())] = z;
 				//}
-			}
+				}
 			w += A;
 		}
 		row += B;
@@ -274,7 +272,16 @@ NSMutableArray<Face*>* bin3 = [NSMutableArray new];
 NSMutableArray<Face*>* bin4 = [NSMutableArray new];
 
 -(void) render{
-	
+	vec3f vectors[3];
+	vectors[0]=vec3f(300, 20, 1);
+	vectors[1]=vec3f(50,400,1);
+	vectors[2]=vec3f(600,300,1);
+	vec3f uvs[3];
+	uvs[0]=vec3f();
+	uvs[1]=vec3f();
+	uvs[2]=vec3f();
+	triangle(vectors, uvs, uvs, uvs, CGRectMake(0, 0,WIDTH, HEIGHT));
+	/*
 	vec3f toCamera = center- camera;
 	
 	GLKMatrix4 Projection = GLKMatrix4Identity;
@@ -336,7 +343,7 @@ NSMutableArray<Face*>* bin4 = [NSMutableArray new];
 		});
 		dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 		//model.rotation = (vec3){model.rotation.x+ 0.1/30, model.rotation.y +0.1/30, model.rotation.z};
-	}
+	}*/
 	
 	//camera.z+=0.1/30;
 	
