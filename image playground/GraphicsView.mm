@@ -257,6 +257,11 @@ vec3 to_screen(vec3 v){
 	}
 	
 }
+NSMutableArray<Face*>* bin1 = [NSMutableArray new];
+NSMutableArray<Face*>* bin2 = [NSMutableArray new];
+NSMutableArray<Face*>* bin3 = [NSMutableArray new];
+NSMutableArray<Face*>* bin4 = [NSMutableArray new];
+
 -(void) render{
 	
 	vec3 toCamera = sub3(center, camera);
@@ -266,14 +271,14 @@ vec3 to_screen(vec3 v){
 	
 	GLKMatrix4 viewMatrix = GLKMatrix4MakePerspective(70 * (M_PI/180), WIDTH/HEIGHT, -0.1, -100);
 	GLKMatrix4 camearaMatrix = GLKMatrix4MakeLookAt(camera.x, camera.y, camera.z, center.x, center.y, center.z, 0, 1, 0);
-	NSMutableArray<Face*>* bin1 = [NSMutableArray new];
-	NSMutableArray<Face*>* bin2 = [NSMutableArray new];
-	NSMutableArray<Face*>* bin3 = [NSMutableArray new];
-	NSMutableArray<Face*>* bin4 = [NSMutableArray new];
 	CGRect box1 = CGRectMake(0, 0, WIDTH/2, HEIGHT/2);
 	CGRect box2 = CGRectMake(WIDTH/2, 0, WIDTH/2, HEIGHT/2);
 	CGRect box3 = CGRectMake(0, HEIGHT/2, WIDTH/2, HEIGHT/2);
 	CGRect box4 = CGRectMake(WIDTH/2, HEIGHT/2, WIDTH/2, HEIGHT/2);
+	[bin1 removeAllObjects];
+	[bin2 removeAllObjects];
+	[bin3 removeAllObjects];
+	[bin4 removeAllObjects];
 	for(Model* model in models){
 		GLKMatrix4 result = GLKMatrix4Identity;
 		result = GLKMatrix4Multiply(result, [model getModelMatrix]);

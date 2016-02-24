@@ -9,49 +9,7 @@
 #include "vector.hpp"
 #include <math.h>
 #include <string.h>
-float cross2(vec2 a, vec2 b){
-	return (a.x*b.y)-(a.y*b.x);
-}
-vec2 add2(vec2 a, vec2 b){
-	return (vec2){a.x+b.x,a.y+b.y};
-}
-vec2 sub2(vec2 a, vec2 b){
-	return (vec2){a.x-b.x,a.y-b.y};
-}
-float dot2(vec2 a,vec2 b){
-	return a.x*b.x+a.y*b.y;
-}
-int icross2(vec2i a, vec2i b){
-	return (int)((float)a.x*(float)b.y)-((float)a.y*(float)b.x);
-}
-vec2i iadd2(vec2i a, vec2i b){
-	return (vec2i){a.x+b.x,a.y+b.y};
-}
-vec2i isub2(vec2i a, vec2i b){
-	return (vec2i){a.x-b.x,a.y-b.y};
-}
-int idot2(vec2i a,vec2i b){
-	return (int)((float)a.x*(float)b.x+(float)a.y*(float)b.y);
-}
-vec3 cross3(vec3 a, vec3 b){
-	vec3 ret;
-	ret.x = a.y*b.z-a.z*b.y;
-	ret.y = -(a.x*b.z-a.z*b.x);
-	ret.z = a.x*b.y-a.y*b.x;
-	
-	return ret;
-	
-}
-vec3 sub3(vec3 a, vec3 b){
-	return (vec3){a.x-b.x,a.y-b.y,a.z-b.z};
-}
-vec3 normal3(vec3 v){
-	float div = sqrtf(v.x*v.x+v.y*v.y+v.z*v.z);
-	return (vec3){v.x/div,v.y/div,v.z/div};
-}
-float dot3(vec3 a, vec3 b){
-	return a.x*b.x+a.y*b.y+a.z*b.z;
-}
+
 float* matmul(float* a, float* b, float* result){
 	memset(result,0,4*4*sizeof(float));
 	for(int i=0;i<4;i++){
@@ -120,28 +78,3 @@ void lookat(vec3 eye, vec3 center, vec3 up, float* camera) {
 	Tr[2][3] = -center.z;
 	matmul(&Minv[0][0], &Tr[0][0], camera);
 }
-vec3 wdiv(vec4 v){
-	if(v.w != 0)
-	return (vec3){v.x/v.w,v.y/v.w,v.z/v.w};
-	return (vec3){v.x,v.y,v.z};
-}
-vec3 add3(vec3 a, vec3 b){
-	return (vec3){a.x+b.x, a.y+b.y, a.z+b.z};
-}
-vec3 mul3(float a, vec3 b){
-	return (vec3){a*b.x,a*b.y, a*b.z};
-}
-vec2 mul2(float a, vec2 b){
-	return (vec2){a*b.x,a*b.y};
-}
-color mulColor(float a, color c){
-	return (color){(uint8_t)(c.r * a),(uint8_t)(c.g * a),(uint8_t)(c.b * a),c.a,};
-}
-int colorToInt(color c){
-	return c.r<<24|c.g<<16|c.b<<8|c.a;
-}
-color addColor(color a, color b){
-	return (color){sadd8(a.b, b.b),sadd8(a.g, b.g),sadd8(a.r, b.r),sadd8(a.a, b.a)};
-}
-uint8_t sadd8(uint8_t a, uint8_t b)
-{ return (a > 0xFF - b) ? 0xFF : a + b; }
