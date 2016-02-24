@@ -98,6 +98,7 @@ NSBitmapImageRep* imageRep;
 									 BYTES_PER_PIXEL*WIDTH,
 									 colorSpace,
 									 kCGImageAlphaNoneSkipFirst,
+									 
 									 // xRRRRRGGGGGBBBBB - 16-bits, first bit is ignored!
 									 provider,
 									 nil, //No decode
@@ -118,7 +119,7 @@ void set_pixel(int x, int y, int color){
 	int* ptr = image_data;
 	ptr += y*WIDTH;
 	ptr += x;
-	*ptr = RED;
+	*ptr = color;
 }
 void fill_row(int x0,int x1, int y, int color){
 	int* ptr = image_data;
@@ -181,19 +182,25 @@ void triangle(vec3f* pts, vec3f* uvs, vec3f* normals, vec3f* pos, CGRect box){
 	for (P.setY(bboxmin.y); P.y()<=bboxmax.y; P+=vec3f(0,1,0)) {
 		vec3f w = row;
 		for (P.setX(bboxmin.x); P.x()<=bboxmax.x; P+=vec3f(1,0,0)) {
+			int c =0x3F3F3fff;
+			if (w.x() >0) c |= RED;
+			if (w.y() >0) c |= GREEN;
+			if (w.z() >0) c |= BLUE;
+			
 			
 			//vec3 bc_screen  = barycentric(pts, P);
-			if ((w.x()>0&&w.y()>0&&w.z()>0)){
+			if ((w.x()>0&&w.y()<0&&w.z()<0)){
+				
 				float z=0;
 				vec3f ptsvec = vec3f(pts[0].z(),pts[1].z(),pts[2].z());
 				z = dot(ptsvec, w);
-				//if(zbuffer[(int)(P.y()*WIDTH+P.x())]>z){
+				//if(zbuffer[(int)(P.y()*WIDTH+P.x())]<z){
 					
 					vec3f uv = w.x()*uvs[0] + w.y() * uvs[1] + w.z() * uvs[2];
 					vec3f normal = w.x()*normals[0] + w.y() * normals[1] + w.z() * normals[2];
 					vec3f position = w.x()*pos[0] + w.y() * pos[1] + w.z() * pos[2];
-					set_pixel(P.x(), P.y(),colorToInt(shade(uv, normal,position)));
-					
+					//set_pixel(P.x(), P.y(),colorToInt(shade(uv, normal,position)));
+					set_pixel(P.x(), P.y(), c);
 					zbuffer[(int)(P.y()*WIDTH+P.x())] = z;
 				//}
 			}
